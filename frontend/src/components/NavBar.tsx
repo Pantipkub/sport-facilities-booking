@@ -25,8 +25,8 @@ export default function NavBar() {
 
   return (
     <header className="border-b border-stone-200 bg-white">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-6">
-        <Link href={user?.role === "admin" ? "/admin" : "/"} className="flex items-center gap-2 font-semibold hover:opacity-80">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center gap-8 overflow-x-auto whitespace-nowrap px-6">
+        <Link href={user?.role === "admin" ? "/admin" : "/"} className="flex shrink-0 items-center gap-2 font-semibold hover:opacity-80">
           <span className="grid size-7 place-items-center rounded-lg bg-stone-900 text-sm text-white">C</span>
           CourtBook
         </Link>
@@ -34,12 +34,12 @@ export default function NavBar() {
           <Link
             key={href}
             href={href}
-            className={`text-sm font-medium ${href === active ? "text-stone-900" : "text-stone-500 hover:text-stone-900"}`}
+            className={`shrink-0 text-sm font-medium ${href === active ? "text-stone-900" : "text-stone-500 hover:text-stone-900"}`}
           >
             {label}
           </Link>
         ))}
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           {user ? (
             <>
               <span className="grid size-8 place-items-center rounded-full bg-stone-100 text-xs font-semibold text-stone-700">
