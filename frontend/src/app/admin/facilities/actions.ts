@@ -57,5 +57,5 @@ export async function deleteFacility(id: string) {
   const user = await requireUser("admin");
   const result = await api(`/facilities/${id}`, { method: "DELETE", token: user.token });
   if (!result.ok) throw new Error(result.error);
-  redirect("/");
+  redirect("/admin/facilities?done=deleted");
 }

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Alert from "@/components/Alert";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import { deleteFacility } from "./actions";
 import FacilityImage from "@/components/FacilityImage";
 import SportBadge from "@/components/SportBadge";
 import { api } from "@/libs/api";
@@ -77,6 +79,12 @@ export default async function AdminFacilitiesPage({ searchParams }: PageProps<"/
                     <Link href={`/admin/facilities/${f._id}/edit`} className="rounded-lg px-3 py-1.5 text-stone-700 hover:bg-stone-100">
                       แก้ไข
                     </Link>
+                    <ConfirmDialog
+                      title={`ลบสนาม ${f.name}?`}
+                      message="สนามนี้จะไม่แสดงในรายการและไม่สามารถจองได้อีก"
+                      action={deleteFacility.bind(null, f._id)}
+                      confirmLabel="ลบสนาม"
+                    />
                   </td>
                 </tr>
               ))}
