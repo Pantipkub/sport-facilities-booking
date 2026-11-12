@@ -12,7 +12,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         <LoginForm registered={registered === "1"} email={typeof email === "string" ? email : ""} />
         <p className="mt-6 text-center text-sm text-stone-500">
           ยังไม่มีบัญชี?{" "}
-          <Link href="/register" className="font-medium text-stone-900 underline underline-offset-4">
+          <Link href="/register" className="font-medium text-stone-900 underline underline-offset-4 hover:text-stone-600">
             สมัครสมาชิก
           </Link>
         </p>

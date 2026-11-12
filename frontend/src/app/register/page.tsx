@@ -57,7 +57,7 @@ export default function RegisterPage() {
         </form>
         <p className="mt-6 text-center text-sm text-stone-500">
           มีบัญชีอยู่แล้ว?{" "}
-          <Link href="/login" className="font-medium text-stone-900 underline underline-offset-4">
+          <Link href="/login" className="font-medium text-stone-900 underline underline-offset-4 hover:text-stone-600">
             เข้าสู่ระบบ
           </Link>
         </p>

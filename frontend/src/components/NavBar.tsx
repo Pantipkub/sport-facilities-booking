@@ -26,7 +26,7 @@ export default function NavBar() {
   return (
     <header className="border-b border-stone-200 bg-white">
       <nav className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-6">
-        <Link href={user?.role === "admin" ? "/admin" : "/"} className="flex items-center gap-2 font-semibold">
+        <Link href={user?.role === "admin" ? "/admin" : "/"} className="flex items-center gap-2 font-semibold hover:opacity-80">
           <span className="grid size-7 place-items-center rounded-lg bg-stone-900 text-sm text-white">C</span>
           CourtBook
         </Link>
@@ -51,7 +51,7 @@ export default function NavBar() {
               )}
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="ml-2 rounded-lg border border-stone-300 px-3 py-1.5 text-sm text-stone-600 hover:bg-stone-50"
+                className="ml-2 rounded-lg border border-stone-300 px-3 py-1.5 text-sm text-stone-600 hover:bg-stone-100 hover:text-stone-900"
               >
                 ออกจากระบบ
               </button>
