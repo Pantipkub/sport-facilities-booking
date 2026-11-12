@@ -16,7 +16,9 @@ export const authOptions: AuthOptions = {
           method: "POST",
           body: { email: credentials.email, password: credentials.password },
         });
-        return result.ok ? result.data : null; // null = wrong email or password
+        if (result.ok) return result.data;
+        if (result.status === 401) return null; // wrong email or password
+        throw new Error("ServerError"); // backend down: the login page shows a retry message instead
       },
     }),
   ],

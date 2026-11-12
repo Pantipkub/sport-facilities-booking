@@ -36,7 +36,7 @@ export default function ConfirmDialog({
           <button
             type="button"
             onClick={() => ref.current?.close()}
-            className={`${BTN} border border-stone-300 bg-white text-stone-700 hover:bg-stone-50`}
+            className={`${BTN} border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 hover:text-stone-900`}
           >
             ยกเลิก
           </button>
