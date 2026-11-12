@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Thai } from "next/font/google";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import NavBar from "@/components/NavBar";
+import NextAuthProvider from "@/providers/NextAuthProvider";
 import "./globals.css";
 
 const plex = IBM_Plex_Sans_Thai({
@@ -13,12 +16,16 @@ export const metadata: Metadata = {
   description: "จองสนามกีฬาของ CourtBook",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="th">
       <body className={plex.className}>
-        <NavBar />
-        {children}
+        <NextAuthProvider session={session}>
+          <NavBar />
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   );
