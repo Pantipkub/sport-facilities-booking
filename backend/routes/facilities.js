@@ -253,10 +253,65 @@
  *   }
  * }
  */
+/**
+ * @swagger
+ * /api/v1/facilities/{id}/availability:
+ *   get:
+ *     tags: [Facilities]
+ *     summary: List booked time ranges for a facility on a date
+ *     security: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/ResourceId'
+ *       - in: query
+ *         name: date
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: exclude
+ *         description: Booking ID to omit when editing.
+ *         schema:
+ *           type: string
+ *           pattern: '^[a-fA-F0-9]{24}$'
+ *     responses:
+ *       '200':
+ *         description: Booked ranges in time order, with no customer information.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     date:
+ *                       type: string
+ *                       format: date
+ *                     booked:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           startTime:
+ *                             type: string
+ *                             example: '23:30'
+ *                           endTime:
+ *                             type: string
+ *                             example: '24:00'
+ *       '400':
+ *         $ref: '#/components/responses/Error400'
+ *       '404':
+ *         $ref: '#/components/responses/Error404'
+ */
 const express = require("express");
 const {
   getFacilities,
   getFacility,
+  getFacilityAvailability,
   createFacility,
   updateFacility,
   deleteFacility,
@@ -265,6 +320,7 @@ const { protect, authorize } = require("../middleware/auth");
 
 const router = express.Router();
 router.route("/").get(getFacilities).post(protect, authorize("admin"), createFacility);
+router.get("/:id/availability", getFacilityAvailability);
 router.route("/:id").get(getFacility).put(protect, authorize("admin"), updateFacility).delete(protect, authorize("admin"), deleteFacility);
 
 module.exports = router;
