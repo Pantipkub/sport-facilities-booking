@@ -1,7 +1,21 @@
-import type { Facility } from "@/types";
+import BookingFormFields from "@/components/BookingFormFields";
+import { bangkokNow } from "@/libs/format";
+import type { Booking, Facility } from "@/types";
 
-// Stub so /facilities/[id] can render it. B replaces this in B2 (feat/b2-booking-form).
-export default function BookingForm(props: { facility: Facility }) {
-  void props;
-  return null;
+type Props = {
+  facility: Facility;
+  booking?: Booking;
+  facilities?: Facility[];
+};
+
+export default function BookingForm({ facility, booking, facilities }: Props) {
+  return (
+    <BookingFormFields
+      key={booking?._id ?? facility._id}
+      facility={facility}
+      booking={booking}
+      facilities={facilities}
+      initialNow={bangkokNow()}
+    />
+  );
 }
