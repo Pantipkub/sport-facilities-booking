@@ -1,0 +1,91 @@
+"use client";
+
+import { useId } from "react";
+import { fromMinutes } from "@/libs/format";
+import {
+  TIME_SLOTS, canEnd, normalizeTimeRange, selectTime, timeCellState,
+  type BookingClock, type BusyTimes, type TimeCellState, type TimeRange,
+} from "@/libs/booking-time";
+
+const CELL: Record<TimeCellState, string> = {
+  free: "text-stone-900 hover:bg-stone-100",
+  start: "bg-stone-900 text-white",
+  end: "bg-stone-900 text-white",
+  range: "text-stone-900 hover:bg-stone-200",
+  endOk: "text-stone-900 ring-1 ring-inset ring-stone-400 hover:bg-stone-100",
+  later: "text-stone-500 hover:bg-stone-100",
+  taken: "bg-stone-100 text-stone-400 line-through cursor-not-allowed",
+  mine: "bg-amber-50 text-amber-700/70 line-through cursor-not-allowed",
+  off: "text-stone-300 cursor-not-allowed",
+};
+
+const TITLES: Partial<Record<TimeCellState, string>> = {
+  start: "เวลาเริ่มต้น",
+  end: "เวลาสิ้นสุด",
+  endOk: "จบที่เวลานี้ได้",
+  later: "ว่าง แตะเพื่อเริ่มใหม่ที่เวลานี้",
+  taken: "ถูกจองแล้ว",
+  mine: "คุณมีจองที่อื่นเวลานี้",
+};
+
+type Props = {
+  date: string;
+  now: BookingClock;
+  value: TimeRange;
+  onChange: (value: TimeRange) => void;
+  busy?: BusyTimes;
+  disabled?: boolean;
+};
+
+export default function TimeRangePicker({ date, now, value, onChange, busy = {}, disabled = false }: Props) {
+  const id = useId();
+  const range = normalizeTimeRange(value, date, now, busy);
+  const maxEnd = range.start === null ? null : TIME_SLOTS.filter((time) => canEnd(range.start!, time, busy)).at(-1);
+  const hint = !date ? "เลือกวันที่ก่อนเลือกเวลา"
+    : range.start === null ? "แตะเวลาที่ต้องการเริ่มเล่น"
+      : range.end === null ? `เริ่ม ${fromMinutes(range.start)} แตะเวลาสิ้นสุด (ได้ถึง ${fromMinutes(maxEnd ?? range.start)})`
+        : "แตะเวลาอื่นเพื่อเลือกใหม่";
+
+  return (
+    <div role="group" aria-labelledby={`${id}-label`} aria-describedby={`${id}-hint`}>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
+        <span id={`${id}-label`} className="text-sm font-medium text-stone-900">2. เลือกเวลาเริ่ม แล้วเลือกเวลาสิ้นสุด</span>
+        <span className="text-xs text-stone-400">สูงสุด 2 ชั่วโมง</span>
+      </div>
+      <p id={`${id}-hint`} aria-live="polite" className="mt-1 text-xs text-stone-500">{hint}</p>
+      <div className="mt-2 grid grid-cols-6 gap-y-1">
+        {TIME_SLOTS.map((time) => {
+          const state = timeCellState(time, range, date, now, busy);
+          const band = state === "range" ? "bg-stone-100"
+            : state === "start" && range.end !== null ? "bg-[linear-gradient(to_right,transparent_50%,#f5f5f4_50%)]"
+              : state === "end" ? "bg-[linear-gradient(to_right,#f5f5f4_50%,transparent_50%)]" : "";
+          const title = TITLES[state] ?? (state === "off"
+            ? time === 1440 ? "ใช้เป็นเวลาสิ้นสุดเท่านั้น" : "ยังไม่ได้เลือกวันที่หรือเลยเวลาแล้ว"
+            : "แตะเพื่อเลือกเวลา");
+          return (
+            <div key={time} className={`flex h-10 items-center justify-center ${band}`}>
+              <button
+                type="button"
+                title={title}
+                aria-label={`${fromMinutes(time)} ${title}`}
+                aria-pressed={state === "start" || state === "end"}
+                disabled={disabled || state === "taken" || state === "mine" || state === "off"}
+                onClick={() => onChange(selectTime(time, range, date, now, busy))}
+                className={`h-9 w-full max-w-12 rounded-lg text-[13px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900 disabled:cursor-not-allowed ${CELL[state]}`}
+              >
+                {fromMinutes(time)}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-stone-500">
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="size-3 rounded bg-stone-900" />เริ่ม / สิ้นสุด</span>
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-5 bg-stone-100" />ช่วงที่เลือก</span>
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="size-3 rounded ring-1 ring-inset ring-stone-400" />จบได้</span>
+        {busy.taken && <span className="flex items-center gap-1.5"><s className="rounded bg-stone-100 px-1 text-stone-400">12:00</s>ถูกจองแล้ว</span>}
+        {busy.mine && <span className="flex items-center gap-1.5"><s className="rounded bg-amber-50 px-1 text-amber-700/70">14:00</s>คุณมีจองที่อื่น</span>}
+      </div>
+    </div>
+  );
+}
