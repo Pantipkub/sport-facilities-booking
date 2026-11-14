@@ -12,9 +12,9 @@ export default function SportFilter({ value, onChange }: { value: string; onChan
           type="button"
           aria-pressed={key === value}
           onClick={() => onChange(key)}
-          className="cb-sport-sticker relative inline-flex min-h-10 items-center justify-center rounded-full border px-7 text-center text-sm font-medium"
+          className="cb-sport-sticker inline-flex min-h-10 items-center justify-center gap-2 rounded-full border text-center text-sm font-medium"
         >
-          {key === value && <TennisBallIcon className="absolute left-2 size-4" />}
+          <TennisBallIcon className="cb-sticker-ball size-4 shrink-0" />
           <span>{label}</span>
         </button>
       ))}

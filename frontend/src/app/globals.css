@@ -169,9 +169,20 @@ main h2 {
   border-color: var(--line);
   color: var(--wine-dark);
   box-shadow: 0 2px #69112b20;
+  padding-inline: 1.75rem;
 }
 
 .cb-sport-sticker:hover { background: var(--sky); }
+
+.cb-sticker-ball { display: none; }
+
+.cb-sport-sticker[aria-pressed="true"] { padding-inline: 1rem; }
+.cb-sport-sticker[aria-pressed="true"] .cb-sticker-ball { display: block; }
+
+@media (hover: hover) {
+  .cb-sport-sticker:hover { padding-inline: 1rem; }
+  .cb-sport-sticker:hover .cb-sticker-ball { display: block; }
+}
 
 .cb-sport-sticker[aria-pressed="true"] {
   background: var(--wine);
