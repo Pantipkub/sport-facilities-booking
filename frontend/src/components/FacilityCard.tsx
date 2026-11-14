@@ -1,6 +1,7 @@
 import Link from "next/link";
 import FacilityImage from "@/components/FacilityImage";
 import SportBadge from "@/components/SportBadge";
+import TennisBallIcon from "@/components/TennisBallIcon";
 import { baht } from "@/libs/format";
 import type { Facility } from "@/types";
 
@@ -22,7 +23,10 @@ export default function FacilityCard({ facility }: { facility: Facility }) {
           </span>
         </div>
         <p className="cb-title mt-4 flex items-center justify-between gap-2 text-sm font-medium">
-          ดูรายละเอียดและจอง <span aria-hidden="true" className="cb-card-arrow grid size-8 shrink-0 place-items-center rounded-full text-base">→</span>
+          ดูรายละเอียดและจอง
+          <span className="cb-card-ball grid size-8 shrink-0 place-items-center rounded-full">
+            <TennisBallIcon className="size-5" />
+          </span>
         </p>
       </div>
     </Link>

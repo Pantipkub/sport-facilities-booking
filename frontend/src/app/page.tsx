@@ -1,4 +1,5 @@
 import Alert from "@/components/Alert";
+import TennisBallIcon from "@/components/TennisBallIcon";
 import { api } from "@/libs/api";
 import type { Facility } from "@/types";
 import FacilityList from "./FacilityList";
@@ -12,7 +13,11 @@ export default async function Home() {
         <p className="mt-3 max-w-sm text-sm leading-relaxed sm:text-base">
           เลือกสนามที่สามย่าน บรรทัดทอง หรือสยาม แล้วจองได้ครั้งละไม่เกิน 2 ชั่วโมง
         </p>
-        {result.ok && <a href="#courts" className="cb-primary cb-court-link mt-5 inline-flex min-h-11 items-center px-5 text-sm font-medium">เลือกสนาม <span aria-hidden="true" className="ml-2">↓</span></a>}
+        {result.ok && (
+          <a href="#courts" className="cb-primary cb-court-link mt-5 inline-flex min-h-11 items-center gap-2 px-5 text-sm font-medium">
+            เลือกสนาม <TennisBallIcon className="size-5 shrink-0" />
+          </a>
+        )}
       </div>
       <div aria-hidden="true" className="cb-court-poster">
         <span className="cb-poster-star" />

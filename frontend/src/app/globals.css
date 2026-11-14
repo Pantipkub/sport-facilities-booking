@@ -154,12 +154,12 @@ main h2 {
   border-radius: .35rem;
 }
 
-.cb-card-arrow {
+.cb-card-ball {
   background: var(--sky);
   color: var(--wine-dark);
 }
 
-.cb-facility-card:is(:hover, :focus-visible) .cb-card-arrow {
+.cb-facility-card:is(:hover, :focus-visible) .cb-card-ball {
   background: var(--wine);
   color: white;
 }
@@ -179,20 +179,19 @@ main h2 {
   color: white;
 }
 
-.cb-sticker-mark { visibility: hidden; }
-.cb-sport-sticker[aria-pressed="true"] .cb-sticker-mark { visibility: visible; }
-
 @media (prefers-reduced-motion: no-preference) {
-  .cb-court-poster, .cb-facility-card, .cb-card-arrow, .cb-court-link span, .cb-sport-sticker {
+  .cb-court-poster, .cb-facility-card, .cb-card-ball, .cb-card-ball svg, .cb-court-link svg, .cb-sport-sticker {
     transition: transform 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
   }
 
   .cb-facility-card:focus-visible { transform: translateY(-3px); }
-  .cb-court-link:focus-visible span { transform: translateY(2px); }
+  .cb-court-link:focus-visible svg,
+  .cb-facility-card:focus-visible .cb-card-ball svg { transform: rotate(24deg); }
 
   @media (hover: hover) {
     .cb-home-hero:hover .cb-court-poster { transform: rotate(3deg) translateY(-3px); }
-    .cb-court-link:hover span { transform: translateY(2px); }
+    .cb-court-link:hover svg,
+    .cb-facility-card:hover .cb-card-ball svg { transform: rotate(24deg); }
     .cb-facility-card:hover {
       transform: translateY(-3px);
       box-shadow: 3px 7px #69112b24;
