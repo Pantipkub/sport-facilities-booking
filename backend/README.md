@@ -68,15 +68,45 @@ server.js        Application entry point
    npm install
    ```
 
-2. Set `MONGO_URI` and a strong `JWT_SECRET` in `config/config.env`.
+2. Copy `config/config.env.example` to `config/config.env`, then set `MONGO_URI`
+   to your MongoDB Atlas connection string with the `courtbook` database and
+   set a strong `JWT_SECRET`. Keep `config/config.env` out of Git.
 
-3. Start the development server:
+3. Set `SEED_ADMIN_PASSWORD` and `SEED_MEMBER_PASSWORD` in `config/config.env`
+   to separate passwords of at least 6 characters. Do not commit these values.
+   Then seed the demonstration data:
+
+   ```bash
+   npm run seed
+   ```
+
+   This creates one account per role and seven facilities, one per sport.
+   Repeated runs preserve existing records, including changed passwords and prices.
+   The demonstration accounts use the passwords from the private configuration:
+
+   | Role | Email | Password |
+   | --- | --- | --- |
+   | admin | admin@courtbook.test | `SEED_ADMIN_PASSWORD` |
+   | member | member@courtbook.test | `SEED_MEMBER_PASSWORD` |
+
+   These accounts are for course demonstrations only. Public registration creates
+   members; admin accounts are provisioned through the seed script.
+
+4. Start the development server:
 
    ```bash
    npm run dev
    ```
 
 The API runs on `http://localhost:5000` by default.
+
+Run `npm test` for HTTP contract and seed tests. The tests do not connect to Atlas.
+
+For Vercel, use `backend` as the project root and set the API variables from
+`config/config.env.example` in the project environment. The two `SEED_*` variables
+are only needed in the environment where you run seed. Set `NODE_ENV=production`
+and `FRONTEND_URL` to the frontend deployment URL. Swagger uses the current API
+origin and is available at `/api-docs/`.
 
 ## API Routes
 
