@@ -1,0 +1,9 @@
+node_modules/
+config/config.env
+.env*
+.vercel/
+npm-debug.log*
+.idea/*
+.DS_Store
+config/config.init.env
+postman/
