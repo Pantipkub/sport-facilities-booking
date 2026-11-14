@@ -121,7 +121,6 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
             disabled={pending}
             onChange={(event) => {
               setFacilityId(event.target.value);
-              setSelection(EMPTY_RANGE);
               setClientErrors({});
               setEdited(true);
             }}

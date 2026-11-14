@@ -9,7 +9,7 @@ type Props =
       facility?: never;
       booking: Booking;
       facilities: Facility[];
-      action?: (previous: BookingFormState, formData: FormData) => Promise<BookingFormState>;
+      action: (previous: BookingFormState, formData: FormData) => Promise<BookingFormState>;
     };
 
 export default function BookingForm({ facility, booking, facilities, action }: Props) {

@@ -5,6 +5,7 @@ import { api } from "@/libs/api";
 import { requireUser } from "@/libs/auth";
 import { getErrorMessage } from "@/libs/errors";
 import type { Booking, Facility } from "@/types";
+import { updateBooking } from "../../actions";
 
 export default async function EditBookingPage({ params }: {
   params: Promise<{ id: string }>;
@@ -26,7 +27,7 @@ export default async function EditBookingPage({ params }: {
     } else if (facilities.data.length === 0) {
       form = <Alert variant="error">ยังไม่มีสนามเปิดให้จอง กรุณาลองใหม่ภายหลัง</Alert>;
     } else {
-      form = <BookingForm booking={booking.data} facilities={facilities.data} />;
+      form = <BookingForm booking={booking.data} facilities={facilities.data} action={updateBooking.bind(null, id)} />;
     }
   }
 
