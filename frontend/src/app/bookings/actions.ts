@@ -34,3 +34,20 @@ export async function createBooking(_previous: BookingFormState, formData: FormD
   revalidatePath("/admin");
   redirect("/bookings?created=1");
 }
+
+export async function deleteBooking(id: string): Promise<void> {
+  const user = await requireUser();
+  if (!/^[a-f\d]{24}$/i.test(id)) redirect("/bookings?deleteError=missing");
+
+  const result = await api(`/bookings/${id}`, { method: "DELETE", token: user.token });
+  if (!result.ok) {
+    const reason = result.status === 401 ? "session"
+      : result.status === 403 ? "forbidden"
+        : result.status === 404 ? "missing" : "failed";
+    redirect(`/bookings?deleteError=${reason}`);
+  }
+
+  revalidatePath("/bookings");
+  revalidatePath("/admin");
+  redirect("/bookings?deleted=1");
+}
