@@ -35,15 +35,19 @@ type Props = {
   onChange: (value: TimeRange) => void;
   busy?: BusyTimes;
   disabled?: boolean;
+  loading?: boolean;
+  failed?: boolean;
   invalid?: boolean;
   errorId?: string;
 };
 
-export default function TimeRangePicker({ date, now, value, onChange, busy = {}, disabled = false, invalid = false, errorId }: Props) {
+export default function TimeRangePicker({ date, now, value, onChange, busy = {}, disabled = false, loading = false, failed = false, invalid = false, errorId }: Props) {
   const id = useId();
   const range = normalizeTimeRange(value, date, now, busy);
   const maxEnd = range.start === null ? null : TIME_SLOTS.filter((time) => canEnd(range.start!, time, busy)).at(-1);
-  const hint = !date ? "เลือกวันที่ก่อนเลือกเวลา"
+  const hint = loading ? "กำลังโหลดช่วงเวลาว่าง"
+    : failed ? "โหลดช่วงเวลาว่างไม่สำเร็จ"
+    : !date ? "เลือกวันที่ก่อนเลือกเวลา"
     : range.start === null ? "แตะเวลาที่ต้องการเริ่มเล่น"
       : range.end === null ? `เริ่ม ${fromMinutes(range.start)} แตะเวลาสิ้นสุด (ได้ถึง ${fromMinutes(maxEnd ?? range.start)})`
         : "แตะเวลาอื่นเพื่อเลือกใหม่";

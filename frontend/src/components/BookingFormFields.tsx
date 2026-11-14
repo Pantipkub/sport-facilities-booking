@@ -5,7 +5,7 @@ import { useActionState, useEffect, useId, useState } from "react";
 import { createBooking, type BookingFormState } from "@/app/bookings/actions";
 import Alert from "@/components/Alert";
 import TimeRangePicker from "@/components/TimeRangePicker";
-import { EMPTY_RANGE, durationText, normalizeTimeRange, validateBookingInput, type BookingClock, type BookingInputErrors, type TimeRange } from "@/libs/booking-time";
+import { EMPTY_RANGE, durationText, isBookingDate, normalizeTimeRange, validateBookingInput, type BookingClock, type BookingInputErrors, type BusyTimes, type TimeRange } from "@/libs/booking-time";
 import { baht, bangkokNow, fromMinutes, toMinutes } from "@/libs/format";
 import { sportOf } from "@/libs/sports";
 import type { Booking, Facility } from "@/types";
@@ -25,6 +25,8 @@ type FormResult = BookingFormState & {
   submits: number;
   values?: { date: string; facility: string; start: string; duration: string };
 };
+
+type AvailabilityResult = { key: string; busy: BusyTimes } | { key: string; failed: true };
 
 export default function BookingFormFields(props: Props) {
   const [state, formAction, pending] = useActionState<FormResult, FormData>(async (previous, formData) => {
@@ -56,6 +58,8 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
   });
   const [clientErrors, setClientErrors] = useState<BookingInputErrors>({});
   const [edited, setEdited] = useState(false);
+  const [availability, setAvailability] = useState<AvailabilityResult>();
+  const [attempt, retryAvailability] = useState(0);
   const [selection, setSelection] = useState<TimeRange>(() => {
     if (state.values?.start) {
       const start = toMinutes(state.values.start);
@@ -66,18 +70,50 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
     return { start, end: start + booking.durationHours * 60 };
   });
   const currentFacility = booking ? facilities.find((item) => item._id === facilityId) : facility;
-  const range = normalizeTimeRange(selection, date, now);
+  const bookingId = booking?._id;
+  const canLoad = Boolean(currentFacility) && isBookingDate(date) && date >= now.date;
+  const availabilityKey = `${facilityId}:${date}:${attempt}`;
+  const currentAvailability = availability?.key === availabilityKey ? availability : undefined;
+  const busy = canLoad && currentAvailability && "busy" in currentAvailability ? currentAvailability.busy : undefined;
+  const loading = canLoad && !currentAvailability;
+  const failed = canLoad && Boolean(currentAvailability && "failed" in currentAvailability);
+  const range = normalizeTimeRange(selection, date, now, busy);
   const minutes = range.start !== null && range.end !== null ? range.end - range.start : 0;
   const time = range.start === null ? "ยังไม่ได้เลือก"
     : `${fromMinutes(range.start)} - ${range.end === null ? "?" : fromMinutes(range.end)}`;
   const errors = { ...(edited ? {} : state.errors), ...clientErrors };
 
   function changeDate(nextDate: string) {
+    if (nextDate === date) return;
     setDate(nextDate);
     setSelection(normalizeTimeRange(range, nextDate, bangkokNow()));
+    retryAvailability((value) => value + 1);
     setClientErrors({});
     setEdited(true);
   }
+
+  useEffect(() => {
+    if (!canLoad) return;
+    const controller = new AbortController();
+    const query = new URLSearchParams({ facility: facilityId, date });
+    if (bookingId) query.set("exclude", bookingId);
+
+    async function loadAvailability() {
+      try {
+        const response = await fetch(`/api/bookings/availability?${query}`, { signal: controller.signal });
+        if (!response.ok) throw new Error("Availability request failed");
+        const busy: BusyTimes = await response.json();
+        if (controller.signal.aborted) return;
+        setAvailability({ key: availabilityKey, busy });
+        setSelection((range) => normalizeTimeRange(range, date, bangkokNow(), busy));
+      } catch {
+        if (!controller.signal.aborted) setAvailability({ key: availabilityKey, failed: true });
+      }
+    }
+
+    void loadAvailability();
+    return () => controller.abort();
+  }, [availabilityKey, bookingId, canLoad, date, facilityId]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(bangkokNow()), 15000);
@@ -94,6 +130,10 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
       action={formAction}
       noValidate
       onSubmit={(event) => {
+        if (loading || failed) {
+          event.preventDefault();
+          return;
+        }
         const data = new FormData(event.currentTarget);
         const inputErrors = validateBookingInput({
           facility: String(data.get("facility") ?? ""),
@@ -121,6 +161,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
             disabled={pending}
             onChange={(event) => {
               setFacilityId(event.target.value);
+              retryAvailability((value) => value + 1);
               setClientErrors({});
               setEdited(true);
             }}
@@ -153,11 +194,16 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
         {errors.bookingDate && <span id={`${id}-date-error`} className="mt-1 block text-xs text-red-600" role="alert">{errors.bookingDate}</span>}
       </label>
       <div className="mt-5">
-        <TimeRangePicker date={date} now={now} value={range} onChange={(nextRange) => {
+        <TimeRangePicker date={date} now={now} value={range} busy={busy} onChange={(nextRange) => {
           setSelection(nextRange);
           setClientErrors({});
           setEdited(true);
-        }} disabled={pending} invalid={!!errors.time} errorId={errors.time ? `${id}-time-error` : undefined} />
+        }} disabled={pending || !busy} loading={loading} failed={failed} invalid={!!errors.time} errorId={errors.time ? `${id}-time-error` : undefined} />
+        {failed && (
+          <button type="button" className="mt-2 text-sm font-medium text-stone-700 underline" onClick={() => retryAvailability((value) => value + 1)}>
+            โหลดช่วงเวลาอีกครั้ง
+          </button>
+        )}
         {errors.time && <p id={`${id}-time-error`} className="mt-2 text-xs text-red-600" role="alert">{errors.time}</p>}
       </div>
       <div className="mt-5 space-y-2 rounded-xl bg-stone-50 p-4 text-sm" aria-live="polite">
@@ -168,7 +214,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
       {state.error && !edited && <div className="mt-4"><Alert variant="error">{state.error}</Alert></div>}
       <div className="mt-5 flex gap-2">
         {booking && <Link href="/bookings" className={`${BTN} flex-1 border border-stone-300 bg-white text-stone-700 hover:bg-stone-100`}>ยกเลิก</Link>}
-        <button type="submit" disabled={pending || (!!booking && !action)} className={`${BTN} flex-1 bg-stone-900 text-white hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60`}>
+        <button type="submit" disabled={pending || loading || failed || (!!booking && !action)} className={`${BTN} flex-1 bg-stone-900 text-white hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60`}>
           {pending ? "กำลังบันทึก" : booking ? "บันทึกการแก้ไข" : "ยืนยันการจอง"}
         </button>
       </div>
