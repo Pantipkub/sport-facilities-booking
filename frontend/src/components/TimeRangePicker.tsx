@@ -35,9 +35,11 @@ type Props = {
   onChange: (value: TimeRange) => void;
   busy?: BusyTimes;
   disabled?: boolean;
+  invalid?: boolean;
+  errorId?: string;
 };
 
-export default function TimeRangePicker({ date, now, value, onChange, busy = {}, disabled = false }: Props) {
+export default function TimeRangePicker({ date, now, value, onChange, busy = {}, disabled = false, invalid = false, errorId }: Props) {
   const id = useId();
   const range = normalizeTimeRange(value, date, now, busy);
   const maxEnd = range.start === null ? null : TIME_SLOTS.filter((time) => canEnd(range.start!, time, busy)).at(-1);
@@ -47,13 +49,13 @@ export default function TimeRangePicker({ date, now, value, onChange, busy = {},
         : "แตะเวลาอื่นเพื่อเลือกใหม่";
 
   return (
-    <div role="group" aria-labelledby={`${id}-label`} aria-describedby={`${id}-hint`}>
+    <div role="group" aria-labelledby={`${id}-label`} aria-describedby={[`${id}-hint`, errorId].filter(Boolean).join(" ")}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
         <span id={`${id}-label`} className="text-sm font-medium text-stone-900">2. เลือกเวลาเริ่ม แล้วเลือกเวลาสิ้นสุด</span>
         <span className="text-xs text-stone-400">สูงสุด 2 ชั่วโมง</span>
       </div>
       <p id={`${id}-hint`} aria-live="polite" className="mt-1 text-xs text-stone-500">{hint}</p>
-      <div className="mt-2 grid grid-cols-6 gap-y-1">
+      <div className={`mt-2 grid grid-cols-6 gap-y-1 ${invalid ? "rounded-lg ring-1 ring-red-400" : ""}`}>
         {TIME_SLOTS.map((time) => {
           const state = timeCellState(time, range, date, now, busy);
           const band = state === "range" ? "bg-stone-100"

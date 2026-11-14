@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const { test } = require("node:test");
 const {
-  TIME_SLOTS, EMPTY_RANGE, canStart, canEnd, normalizeTimeRange, timeCellState, selectTime, isBookingDate, durationText,
+  TIME_SLOTS, EMPTY_RANGE, canStart, canEnd, normalizeTimeRange, timeCellState, selectTime, isBookingDate, durationText, validateBookingInput,
 } = require("../src/libs/booking-time.ts");
 
 const now = { date: "2026-11-15", minutes: 967 };
@@ -64,4 +64,36 @@ test("duration labels use Thai hours and minutes", () => {
   assert.equal(durationText(30), "30 นาที");
   assert.equal(durationText(90), "1 ชั่วโมง 30 นาที");
   assert.equal(durationText(120), "2 ชั่วโมง");
+});
+
+const validInput = { facility: "507f1f77bcf86cd799439011", bookingDate: tomorrow, startTime: "16:00", durationHours: "1.5" };
+
+test("submission validation accepts valid half-hour intervals including midnight", () => {
+  assert.deepEqual(validateBookingInput(validInput, now), {});
+  assert.deepEqual(validateBookingInput({ ...validInput, startTime: "23:30", durationHours: "0.5" }, now), {});
+  assert.deepEqual(validateBookingInput({ ...validInput, startTime: "06:00", durationHours: 2 }, now), {});
+});
+
+test("submission validation identifies empty, invalid and past dates", () => {
+  assert.match(validateBookingInput({ ...validInput, bookingDate: "" }, now).bookingDate, /กรุณาเลือกวันที่/);
+  assert.match(validateBookingInput({ ...validInput, bookingDate: "2026-02-30" }, now).bookingDate, /ไม่ถูกต้อง/);
+  assert.match(validateBookingInput({ ...validInput, bookingDate: "2026-11-14" }, now).bookingDate, /ย้อนหลัง/);
+});
+
+test("submission validation rejects incomplete, expired and off-grid ranges", () => {
+  const cases = [
+    [{ startTime: "" }, /เริ่มต้นและเวลาสิ้นสุด/],
+    [{ startTime: "16:10" }, /ช่วงละ 30 นาที/],
+    [{ startTime: "24:00" }, /เวลาเริ่มต้น/],
+    [{ startTime: "05:30" }, /06:00/],
+    [{ bookingDate: now.date, startTime: "16:00" }, /ผ่านไปแล้ว/],
+    [{ durationHours: "" }, /เลือกเวลาสิ้นสุด/],
+    [{ durationHours: "0" }, /30 นาทีถึง 2 ชั่วโมง/],
+    [{ durationHours: "2.5" }, /30 นาทีถึง 2 ชั่วโมง/],
+    [{ durationHours: "0.75" }, /ช่วงละ 30 นาที/],
+    [{ durationHours: "invalid" }, /30 นาทีถึง 2 ชั่วโมง/],
+    [{ startTime: "23:30", durationHours: "1" }, /ภายในวันเดียวกัน/],
+  ];
+  for (const [overrides, expected] of cases) assert.match(validateBookingInput({ ...validInput, ...overrides }, now).time, expected);
+  assert.match(validateBookingInput({ ...validInput, facility: "" }, now).facility, /เลือกสนาม/);
 });
