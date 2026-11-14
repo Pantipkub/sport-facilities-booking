@@ -146,7 +146,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
         if (Object.keys(inputErrors).length) event.preventDefault();
       }}
       onReset={(event) => event.preventDefault()}
-      className="p-4 sm:p-6 cb-booking-theme cb-booking-panel"
+      className="p-4 sm:p-6 cb-booking-panel"
       aria-labelledby={`${id}-title`}
       aria-busy={pending}
     >

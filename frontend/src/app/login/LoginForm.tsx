@@ -55,7 +55,7 @@ export default function LoginForm({ registered, email }: { registered: boolean; 
         </label>
         <button
           disabled={pending}
-          className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-stone-900 px-5 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-60"
+          className="inline-flex h-11 w-full items-center justify-center rounded-lg cb-primary px-5 text-sm font-medium disabled:opacity-60"
         >
           {pending ? "กำลังเข้าสู่ระบบ" : "เข้าสู่ระบบ"}
         </button>

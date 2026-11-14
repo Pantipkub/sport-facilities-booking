@@ -21,14 +21,14 @@ export default async function AdminFacilitiesPage({ searchParams }: PageProps<"/
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
-      <div className="flex items-end justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">จัดการสนาม</h1>
+          <h1 className="cb-title text-3xl font-semibold tracking-tight">จัดการสนาม</h1>
           {result.ok && <p className="mt-1 text-stone-500">{result.data.length} สนามที่เปิดให้จอง</p>}
         </div>
         <Link
           href="/admin/facilities/new"
-          className="inline-flex h-11 items-center justify-center rounded-lg bg-stone-900 px-5 text-sm font-medium text-white hover:bg-stone-700"
+          className="inline-flex h-11 items-center justify-center rounded-lg cb-primary px-5 text-sm font-medium"
         >
           + เพิ่มสนาม
         </Link>
@@ -43,9 +43,9 @@ export default async function AdminFacilitiesPage({ searchParams }: PageProps<"/
           <Alert variant="error">โหลดรายการสนามไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</Alert>
         </div>
       ) : (
-        <div className="mt-6 overflow-hidden rounded-2xl border border-stone-200 bg-white">
+        <div className="mt-6 overflow-x-auto cb-booking-table">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-stone-200 bg-stone-50 text-stone-500">
+            <thead>
               <tr>
                 <th className="w-24 px-5 py-3 font-medium">รูป</th>
                 <th className="px-5 py-3 font-medium">ชื่อสนาม</th>

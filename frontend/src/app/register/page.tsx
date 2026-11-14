@@ -20,9 +20,9 @@ export default function RegisterPage() {
   const [state, action, pending] = useActionState<RegisterState, FormData>(register, {});
 
   return (
-    <main className="grid place-items-center px-6 py-14">
-      <div className="w-full max-w-md rounded-2xl border border-stone-200 bg-white p-8 shadow-sm">
-        <h1 className="text-2xl font-semibold tracking-tight">สมัครสมาชิก</h1>
+    <main className="cb-grid-paper mt-6 grid place-items-center px-4 py-14">
+      <div className="w-full max-w-md cb-paper cb-ticket p-5 sm:p-8">
+        <h1 className="cb-title text-2xl font-semibold tracking-tight">สมัครสมาชิก</h1>
         <p className="mt-1 text-sm text-stone-500">สร้างบัญชีเพื่อเริ่มจองสนามกีฬา</p>
         {state.error && (
           <div className="mt-5">
@@ -50,7 +50,7 @@ export default function RegisterPage() {
           })}
           <button
             disabled={pending}
-            className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-stone-900 px-5 text-sm font-medium text-white hover:bg-stone-700 disabled:opacity-60"
+            className="inline-flex h-11 w-full items-center justify-center rounded-lg cb-primary px-5 text-sm font-medium disabled:opacity-60"
           >
             {pending ? "กำลังสมัครสมาชิก" : "สมัครสมาชิก"}
           </button>

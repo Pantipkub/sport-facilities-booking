@@ -8,7 +8,7 @@ export default function FacilityCard({ facility }: { facility: Facility }) {
   return (
     <Link
       href={`/facilities/${facility._id}`}
-      className="group overflow-hidden rounded-2xl border border-stone-200 bg-white transition hover:border-stone-300 hover:shadow-sm"
+      className="cb-paper group overflow-hidden transition hover:border-[var(--wine)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--wine)]"
     >
       <FacilityImage facility={facility} />
       <div className="p-5">
@@ -21,7 +21,7 @@ export default function FacilityCard({ facility }: { facility: Facility }) {
             <span className="text-xl font-semibold text-stone-900">{baht(facility.hourlyRate)}</span> / ชม.
           </span>
         </div>
-        <p className="mt-4 text-sm font-medium text-stone-900 group-hover:underline">ดูรายละเอียดและจอง →</p>
+        <p className="cb-title mt-4 text-sm font-medium group-hover:underline">ดูรายละเอียดและจอง →</p>
       </div>
     </Link>
   );

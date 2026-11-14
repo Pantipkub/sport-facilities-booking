@@ -1,13 +1,3 @@
-.cb-booking-theme {
-  --wine: #8e163b;
-  --wine-dark: #69112b;
-  --paper: #faf3e5;
-  --ink: #37252c;
-  --line: #dcc4bd;
-  --sky: #cfdeeb;
-  color: var(--ink);
-}
-
 .cb-booking-hero {
   position: relative;
   isolation: isolate;
@@ -99,21 +89,6 @@
 
 .cb-booking-primary:hover, .cb-booking-primary:focus-visible {
   background: var(--wine-dark);
-}
-
-.cb-booking-table {
-  border: 1px solid var(--line);
-  border-radius: 1.25rem;
-  background: #fffcf6;
-}
-
-.cb-booking-table thead {
-  background: var(--wine);
-  color: white;
-}
-
-.cb-booking-table tbody tr:nth-child(even) {
-  background: #f4f7fa;
 }
 
 .cb-booking-summary {

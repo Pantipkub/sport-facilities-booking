@@ -6,21 +6,25 @@ import FacilityList from "./FacilityList";
 export default async function Home() {
   const result = await api<Facility[]>("/facilities");
   const title = (
-    <>
-      <h1 className="text-3xl font-semibold tracking-tight">จองสนามกีฬา</h1>
-      <p className="mt-1 text-stone-500">
-        สนามทั้งหมดของ CourtBook 3 สาขา (สามย่าน, บรรทัดทอง, สยาม) จองได้ทันที ครั้งละไม่เกิน 2 ชั่วโมง
-      </p>
-    </>
+    <section className="cb-home-hero grid items-center gap-8 md:grid-cols-[1.25fr_1fr]">
+      <div className="cb-paper cb-ticket relative z-10 p-5 sm:p-8">
+        <h1 className="cb-home-title cb-title font-semibold tracking-tight">จองสนามกีฬา</h1>
+        <p className="mt-3 max-w-sm text-sm leading-relaxed sm:text-base">
+          เลือกสนามที่สามย่าน บรรทัดทอง หรือสยาม แล้วจองได้ครั้งละไม่เกิน 2 ชั่วโมง
+        </p>
+        {result.ok && <a href="#courts" className="cb-primary mt-5 inline-flex min-h-11 items-center px-5 text-sm font-medium">เลือกสนาม <span aria-hidden="true" className="ml-2">↓</span></a>}
+      </div>
+      <div aria-hidden="true" className="cb-court-poster" />
+    </section>
   );
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
+    <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
+      {title}
       {result.ok ? (
-        <FacilityList facilities={result.data}>{title}</FacilityList>
+        <FacilityList facilities={result.data} />
       ) : (
         <>
-          {title}
           <div className="mt-6">
             <Alert variant="error">โหลดรายการสนามไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</Alert>
           </div>

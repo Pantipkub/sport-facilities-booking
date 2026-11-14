@@ -6,7 +6,7 @@ import SportFilter from "@/components/SportFilter";
 import type { Facility } from "@/types";
 
 // The backend has no query filters, so search and sport filtering happen here
-export default function FacilityList({ facilities, children }: { facilities: Facility[]; children: React.ReactNode }) {
+export default function FacilityList({ facilities }: { facilities: Facility[] }) {
   const [sport, setSport] = useState("all");
   const [query, setQuery] = useState("");
   const q = query.trim().toLowerCase();
@@ -15,16 +15,16 @@ export default function FacilityList({ facilities, children }: { facilities: Fac
   );
 
   return (
-    <>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>{children}</div>
+    <section id="courts" className="mt-8 scroll-mt-6" aria-labelledby="court-list-title">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <h2 id="court-list-title" className="cb-title text-2xl font-semibold">สนามทั้งหมด</h2>
         <input
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="ค้นหาชื่อสนามหรือสถานที่"
           aria-label="ค้นหาชื่อสนามหรือสถานที่"
-          className="h-11 w-72 rounded-lg border border-stone-300 bg-white px-4 text-sm outline-none focus:border-stone-900 focus:ring-2 focus:ring-stone-200"
+          className="h-11 w-full rounded-full border border-[var(--line)] bg-white px-4 text-sm outline-none focus:border-[var(--wine)] focus:ring-2 focus:ring-[var(--sky)] sm:w-72"
         />
       </div>
       <div className="mt-6">
@@ -41,6 +41,6 @@ export default function FacilityList({ facilities, children }: { facilities: Fac
           </p>
         )}
       </div>
-    </>
+    </section>
   );
 }

@@ -13,7 +13,7 @@ export default function SportFilter({ value, onChange }: { value: string; onChan
           onClick={() => onChange(key)}
           className={`h-9 rounded-full border px-4 text-sm font-medium ${
             key === value
-              ? "border-stone-900 bg-stone-900 text-white"
+              ? "border-[var(--wine)] cb-primary"
               : "border-stone-300 bg-white text-stone-600 hover:bg-stone-100 hover:text-stone-900"
           }`}
         >

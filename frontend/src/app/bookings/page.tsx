@@ -27,7 +27,7 @@ export default async function BookingsPage({ searchParams }: {
     ? DELETE_ERRORS[query.deleteError] : undefined;
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 cb-booking-theme">
+    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="cb-booking-hero">
         <span className="cb-booking-hero-court" aria-hidden="true" />
         <div className="cb-booking-note">

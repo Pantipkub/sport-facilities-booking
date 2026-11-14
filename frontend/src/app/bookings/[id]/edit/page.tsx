@@ -33,7 +33,7 @@ export default async function EditBookingPage({ params }: {
   }
 
   return (
-    <main className="mx-auto max-w-xl px-4 py-8 sm:px-6 sm:py-10 cb-booking-theme">
+    <main className="mx-auto max-w-xl px-4 py-8 sm:px-6 sm:py-10">
       <Link href="/bookings" className="text-sm text-stone-500 hover:text-stone-900">
         ← {admin ? "การจองทั้งหมด" : "การจองของฉัน"}
       </Link>

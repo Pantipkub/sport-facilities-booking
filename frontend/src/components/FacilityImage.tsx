@@ -18,7 +18,7 @@ export default function FacilityImage({
   }
   const sport = sportOf(facility.sportType);
   return (
-    <div className={`grid place-items-center ${sport.color} ${className}`}>
+    <div className={`grid place-items-center ${small ? "" : "cb-card-art"} ${sport.color} ${className}`}>
       <span className={`${small ? "text-[9px]" : "text-lg"} font-semibold opacity-50`}>{sport.label}</span>
     </div>
   );

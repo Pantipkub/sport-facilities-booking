@@ -1,7 +1,139 @@
 @import "tailwindcss";
 
 body {
-  @apply bg-stone-50 text-stone-900 antialiased;
+  --wine: #8e163b;
+  --wine-dark: #69112b;
+  --paper: #faf3e5;
+  --ink: #37252c;
+  --line: #dcc4bd;
+  --sky: #cfdeeb;
+  background: #f5efe2;
+  color: var(--ink);
+  @apply antialiased;
+}
+
+.cb-primary {
+  background: var(--wine);
+  border-radius: 9999px;
+  color: white;
+}
+
+.cb-primary:hover { background: var(--wine-dark); }
+
+.cb-paper {
+  background: #fffcf6;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px #69112b12;
+}
+
+.cb-title { color: var(--wine-dark); }
+
+.cb-booking-table {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: #fffcf6;
+}
+
+.cb-booking-table thead {
+  background: var(--wine);
+  color: white;
+}
+
+.cb-booking-table tbody tr:nth-child(even) { background: #f4f7fa; }
+
+.cb-grid-paper {
+  background-color: var(--paper);
+  background-image: linear-gradient(#8e163b16 1px, transparent 1px),
+    linear-gradient(90deg, #8e163b16 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.cb-ticket { position: relative; }
+
+.cb-ticket::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  width: 4.5rem;
+  height: 1rem;
+  top: -.45rem;
+  left: 1.25rem;
+  background: #b5caddd9;
+  transform: rotate(-7deg);
+}
+
+.cb-home-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: repeating-linear-gradient(90deg, var(--paper) 0 21px, var(--sky) 21px 42px);
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  padding: clamp(1.25rem, 6vw, 4.5rem);
+}
+
+.cb-home-title {
+  font-size: clamp(2.15rem, 6vw, 4.75rem);
+  line-height: 1.13;
+}
+
+.cb-court-poster {
+  position: relative;
+  width: min(100%, 19rem);
+  aspect-ratio: 4 / 3;
+  margin: auto;
+  background-color: var(--wine);
+  border: .55rem solid var(--paper);
+  box-shadow: 0 0 0 1px var(--wine), .55rem .65rem #69112b25;
+  border-radius: 1rem;
+  transform: rotate(7deg);
+}
+
+.cb-court-poster::before {
+  content: "";
+  position: absolute;
+  inset: 11%;
+  border: 2px solid var(--paper);
+  background: radial-gradient(circle at center, transparent 18%, var(--paper) 19%, transparent 20%),
+    linear-gradient(90deg, transparent 49.5%, var(--paper) 49.5% 50.5%, transparent 50.5%);
+}
+
+.cb-court-poster::after {
+  content: "";
+  position: absolute;
+  right: 4%;
+  bottom: -8%;
+  width: 27%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid #637b91;
+  background: radial-gradient(ellipse at 6% 52%, transparent 52%, #637b91 53% 55%, transparent 56%),
+    radial-gradient(ellipse at 94% 48%, transparent 52%, #637b91 53% 55%, transparent 56%), var(--sky);
+  box-shadow: 4px 4px #69112b28;
+  transform: rotate(-24deg);
+}
+
+@media (max-width: 767px) {
+  .cb-court-poster {
+    width: min(70%, 12rem);
+    margin-block-end: .65rem;
+  }
+}
+
+.cb-card-art { position: relative; isolation: isolate; overflow: hidden; }
+
+.cb-card-art::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 14% 19%;
+  transform: rotate(-10deg);
+  border: 1px solid currentColor;
+  border-radius: .5rem;
+  opacity: .28;
+  background: linear-gradient(90deg, transparent 49.5%, currentColor 49.5% 50.5%, transparent 50.5%);
 }
 
 /* Tailwind v4 gives buttons cursor: default; every clickable thing shows a pointer and eases its hover */
