@@ -14,7 +14,7 @@ const BTN = "inline-flex h-11 items-center justify-center rounded-lg px-5 text-s
 const INPUT = "mt-1.5 h-11 w-full rounded-lg border bg-white px-3.5 text-sm outline-none focus:border-stone-900 focus:ring-2 focus:ring-stone-200";
 
 type Props = {
-  facility: Facility;
+  facility?: Facility;
   booking?: Booking;
   facilities?: Facility[];
   initialNow: BookingClock;
@@ -49,7 +49,11 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
   const id = useId();
   const [now, setNow] = useState(initialNow);
   const [date, setDate] = useState(state.values?.date ?? booking?.bookingDate.slice(0, 10) ?? initialNow.date);
-  const [facilityId, setFacilityId] = useState(state.values?.facility ?? facility._id);
+  const [facilityId, setFacilityId] = useState(() => {
+    if (!booking) return facility?._id ?? "";
+    const selected = state.values?.facility ?? booking.facility?._id;
+    return facilities.some((item) => item._id === selected) ? selected ?? "" : "";
+  });
   const [clientErrors, setClientErrors] = useState<BookingInputErrors>({});
   const [edited, setEdited] = useState(false);
   const [selection, setSelection] = useState<TimeRange>(() => {
@@ -61,8 +65,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
     const start = toMinutes(booking.startTime);
     return { start, end: start + booking.durationHours * 60 };
   });
-  const options = [facility, ...facilities.filter((item) => item._id !== facility._id)];
-  const currentFacility = options.find((item) => item._id === facilityId) ?? facility;
+  const currentFacility = booking ? facilities.find((item) => item._id === facilityId) : facility;
   const range = normalizeTimeRange(selection, date, now);
   const minutes = range.start !== null && range.end !== null ? range.end - range.start : 0;
   const time = range.start === null ? "ยังไม่ได้เลือก"
@@ -126,8 +129,10 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
             aria-describedby={errors.facility ? `${id}-facility-error` : undefined}
             className={`${INPUT} ${errors.facility ? "border-red-400" : "border-stone-300"}`}
           >
-            {options.map((item) => <option key={item._id} value={item._id}>{item.name} ({sportOf(item.sportType).label})</option>)}
+            <option value="" disabled>เลือกสนาม</option>
+            {facilities.map((item) => <option key={item._id} value={item._id}>{item.name} ({sportOf(item.sportType).label})</option>)}
           </select>
+          {!facilityId && !errors.facility && <span className="mt-1 block text-xs text-stone-500">สนามเดิมไม่เปิดให้จองแล้ว กรุณาเลือกสนามใหม่</span>}
           {errors.facility && <span id={`${id}-facility-error`} className="mt-1 block text-xs text-red-600" role="alert">{errors.facility}</span>}
         </label>
       )}
@@ -159,7 +164,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
       <div className="mt-5 space-y-2 rounded-xl bg-stone-50 p-4 text-sm" aria-live="polite">
         <div className="flex justify-between gap-3"><span className="text-stone-500">เวลา</span><span className="font-medium">{time}</span></div>
         <div className="flex justify-between gap-3"><span className="text-stone-500">รวม</span><span className="font-medium">{minutes ? durationText(minutes) : "-"}</span></div>
-        <div className="flex justify-between gap-3"><span className="text-stone-500">ราคา</span><span className="text-base font-semibold">{minutes ? baht(currentFacility.hourlyRate * minutes / 60) : "-"}</span></div>
+        <div className="flex justify-between gap-3"><span className="text-stone-500">ราคา</span><span className="text-base font-semibold">{minutes && currentFacility ? baht(currentFacility.hourlyRate * minutes / 60) : "-"}</span></div>
       </div>
       {state.error && !edited && <div className="mt-4"><Alert variant="error">{state.error}</Alert></div>}
       <div className="mt-5 flex gap-2">

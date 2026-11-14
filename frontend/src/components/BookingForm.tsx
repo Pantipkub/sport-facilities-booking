@@ -3,17 +3,19 @@ import { bangkokNow } from "@/libs/format";
 import type { Booking, Facility } from "@/types";
 import type { BookingFormState } from "@/app/bookings/actions";
 
-type Props = {
-  facility: Facility;
-  booking?: Booking;
-  facilities?: Facility[];
-  action?: (previous: BookingFormState, formData: FormData) => Promise<BookingFormState>;
-};
+type Props =
+  | { facility: Facility; booking?: never; facilities?: never; action?: never }
+  | {
+      facility?: never;
+      booking: Booking;
+      facilities: Facility[];
+      action?: (previous: BookingFormState, formData: FormData) => Promise<BookingFormState>;
+    };
 
 export default function BookingForm({ facility, booking, facilities, action }: Props) {
   return (
     <BookingFormFields
-      key={booking?._id ?? facility._id}
+      key={booking?._id ?? facility?._id}
       facility={facility}
       booking={booking}
       facilities={facilities}
