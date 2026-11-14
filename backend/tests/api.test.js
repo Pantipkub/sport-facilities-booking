@@ -67,6 +67,55 @@ test("protected routes reject requests without a bearer token", async () => {
   }
 });
 
+test("facility availability returns only booked times in order and excludes the edited booking", async (t) => {
+  t.mock.method(Facility, "exists", async (filter) => {
+    assert.deepEqual(filter, { _id: facilityId, isActive: true });
+    return { _id: facilityId };
+  });
+  t.mock.method(Booking, "find", (filter) => {
+    assert.deepEqual(filter, { facility: facilityId, bookingDate: new Date(date), _id: { $ne: bookingId } });
+    return {
+      select(fields) {
+        assert.deepEqual(fields, { _id: 0, startMinutes: 1, endMinutes: 1 });
+        return this;
+      },
+      sort(order) {
+        assert.deepEqual(order, { startMinutes: 1 });
+        return this;
+      },
+      lean: async () => [
+        { startMinutes: 840, endMinutes: 900, user: memberId },
+        { startMinutes: 1410, endMinutes: 1440 },
+      ],
+    };
+  });
+  const { response, body } = await request(
+    `/api/v1/facilities/${facilityId}/availability?date=${date}&exclude=${bookingId}`,
+    { method: "GET" },
+  );
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.deepEqual(body, {
+    success: true, data: { date, booked: [
+      { startTime: "14:00", endTime: "15:00" },
+      { startTime: "23:30", endTime: "24:00" },
+    ] },
+  });
+});
+
+test("facility availability validates query parameters and rejects inactive or missing facilities", async (t) => {
+  const exists = t.mock.method(Facility, "exists", async () => null);
+  for (const query of ["", "?date=2026-02-30", "?date=2026-2-3", `?date=${date}&exclude=invalid`]) {
+    const { response, body } = await request(`/api/v1/facilities/${facilityId}/availability${query}`, { method: "GET" });
+    assert.equal(response.status, 400);
+    assert.equal(body.success, false);
+    assert.equal(typeof body.error, "string");
+  }
+  assert.equal(exists.mock.callCount(), 0);
+  const { response } = await request(`/api/v1/facilities/${facilityId}/availability?date=${date}`, { method: "GET" });
+  assert.equal(response.status, 404);
+});
+
 test("public registration always creates a member", async (t) => {
   const create = t.mock.method(User, "create", async (input) => ({
     ...input,
