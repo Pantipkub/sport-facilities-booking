@@ -143,12 +143,13 @@ if (process.env.MONGO_URI) {
 }
 
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(helmet());
 app.use(hpp());
 app.use(rateLimit({
   windowMs: 10 * 60 * 1000,
-  limit: 100,
+  limit: 1000,
   message: {
     success: false,
     error: "Too many requests from this IP, please try again later.",
@@ -177,7 +178,7 @@ const swaggerDocs = swaggerJsDoc({
       description: "REST API for sports facility management and bookings.",
     },
     servers: [{
-      url: `http://localhost:${process.env.PORT || 5000}`,
+      url: "/",
     }],
     components: {
       securitySchemes: {
@@ -220,10 +221,28 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+
+  let statusCode = err.statusCode || err.status || 500;
+  let message = err.message || "Internal Server Error";
+
+  if (err.code === 11000) {
+    statusCode = 400;
+    const duplicateFields = err.keyPattern || err.keyValue || {};
+    message = Object.hasOwn(duplicateFields, "email")
+      ? "Email already registered"
+      : Object.hasOwn(duplicateFields, "name")
+        ? "Facility name already exists"
+        : "Duplicate value already exists";
+  } else if (err.name === "ValidationError") {
+    statusCode = 400;
+    message = Object.values(err.errors).map((error) => error.message).join(", ");
+  }
+
   console.error(err.stack);
-  res.status(err.statusCode || 500).json({
+  res.status(statusCode).json({
     success: false,
-    error: err.message || "Internal Server Error",
+    error: message,
     ...(process.env.NODE_ENV === "development" ? { stack: err.stack } : {}),
   });
 });

@@ -55,7 +55,7 @@
  *         "Bookings"
  *       ],
  *       "summary": "Create a booking",
- *       "description": "Member only; admins cannot create bookings. Ownership comes from the authenticated user. Booking dates use YYYY-MM-DD and cannot precede today in UTC. Start time uses HH:mm. Duration is 0.5 to 2 hours and must end on the same day. The facility must be active. Checks for overlapping bookings for both the facility and member.",
+ *       "description": "Member only; admins cannot create bookings. Ownership comes from the authenticated user. Booking dates use YYYY-MM-DD and cannot precede today in UTC. Start time uses HH:mm on the hour or half hour. Duration is 0.5 to 2 hours in 30-minute increments and must end on the same day. The facility must be active. Checks for overlapping bookings for both the facility and member.",
  *       "security": [
  *         {
  *           "bearerAuth": []
@@ -174,7 +174,7 @@
  *         "Bookings"
  *       ],
  *       "summary": "Update a booking",
- *       "description": "Owner or admin only. Omitted fields retain their values; ownership cannot be changed. Booking dates use YYYY-MM-DD and cannot precede today in UTC. Start time uses HH:mm. Duration is 0.5 to 2 hours and must end on the same day. The facility must be active. Checks for overlapping bookings for both the facility and member.",
+ *       "description": "Owner or admin only. Omitted fields retain their values; ownership cannot be changed. Booking dates use YYYY-MM-DD and cannot precede today in UTC. Start time uses HH:mm on the hour or half hour. Duration is 0.5 to 2 hours in 30-minute increments and must end on the same day. The facility must be active. Checks for overlapping bookings for both the facility and member.",
  *       "security": [
  *         {
  *           "bearerAuth": []

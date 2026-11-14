@@ -71,10 +71,10 @@
  *           "role": {
  *             "type": "string",
  *             "enum": [
- *               "member",
- *               "admin"
+ *               "member"
  *             ],
- *             "default": "member"
+ *             "default": "member",
+ *             "description": "Public registration always creates a member. Admins are provisioned by the seed script."
  *           }
  *         },
  *         "required": [
@@ -266,13 +266,14 @@
  *           },
  *           "startTime": {
  *             "type": "string",
- *             "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+ *             "pattern": "^([01]\\d|2[0-3]):(00|30)$",
  *             "example": "14:00"
  *           },
  *           "durationHours": {
  *             "type": "number",
  *             "minimum": 0.5,
  *             "maximum": 2,
+ *             "multipleOf": 0.5,
  *             "example": 1.5
  *           }
  *         },
@@ -298,13 +299,14 @@
  *           },
  *           "startTime": {
  *             "type": "string",
- *             "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+ *             "pattern": "^([01]\\d|2[0-3]):(00|30)$",
  *             "example": "14:00"
  *           },
  *           "durationHours": {
  *             "type": "number",
  *             "minimum": 0.5,
  *             "maximum": 2,
+ *             "multipleOf": 0.5,
  *             "example": 1.5
  *           }
  *         }
@@ -492,7 +494,7 @@
  *         }
  *       },
  *       "Error500": {
- *         "description": "Server error. Current global handling also returns this for Mongoose validation, cast, and duplicate-key errors.",
+ *         "description": "Unexpected server error. Validation and duplicate-key errors return 400.",
  *         "content": {
  *           "application/json": {
  *             "schema": {
@@ -509,7 +511,7 @@
  *         "Authentication"
  *       ],
  *       "summary": "Register a user",
- *       "description": "Public registration accepts member or admin roles and issues a JWT in data.token and an HTTP-only token cookie.",
+ *       "description": "Public registration always creates a member and issues a JWT in data.token and an HTTP-only token cookie. Admins are provisioned by the seed script.",
  *       "security": [],
  *       "responses": {
  *         "201": {
@@ -529,6 +531,9 @@
  *               }
  *             }
  *           }
+ *         },
+ *         "400": {
+ *           "$ref": "#/components/responses/Error400"
  *         },
  *         "429": {
  *           "$ref": "#/components/responses/Error429"
