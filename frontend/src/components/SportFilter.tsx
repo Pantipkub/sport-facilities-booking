@@ -11,12 +11,9 @@ export default function SportFilter({ value, onChange }: { value: string; onChan
           type="button"
           aria-pressed={key === value}
           onClick={() => onChange(key)}
-          className={`h-9 rounded-full border px-4 text-sm font-medium ${
-            key === value
-              ? "border-[var(--wine)] cb-primary"
-              : "border-stone-300 bg-white text-stone-600 hover:bg-stone-100 hover:text-stone-900"
-          }`}
+          className="cb-sport-sticker inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3 text-sm font-medium"
         >
+          <span aria-hidden="true" className="cb-sticker-mark">✓</span>
           {label}
         </button>
       ))}

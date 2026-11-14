@@ -129,6 +129,78 @@ main h2 {
   transform: rotate(-24deg);
 }
 
+.cb-poster-star {
+  position: absolute;
+  z-index: 1;
+  top: -11%;
+  right: -8%;
+  width: 29%;
+  aspect-ratio: 1;
+  background: #f9d980;
+  clip-path: polygon(50% 0, 60% 32%, 85% 15%, 71% 39%, 100% 50%, 71% 61%, 85% 85%, 60% 69%, 50% 100%, 40% 69%, 15% 85%, 29% 61%, 0 50%, 29% 39%, 15% 15%, 40% 32%);
+  rotate: -12deg;
+}
+
+.cb-poster-stamp {
+  position: absolute;
+  z-index: 1;
+  bottom: 7%;
+  left: -9%;
+  width: 29%;
+  aspect-ratio: 1.5;
+  rotate: -24deg;
+  background: var(--sky);
+  border: 3px dotted var(--wine);
+  border-radius: .35rem;
+}
+
+.cb-card-arrow {
+  background: var(--sky);
+  color: var(--wine-dark);
+}
+
+.cb-facility-card:is(:hover, :focus-visible) .cb-card-arrow {
+  background: var(--wine);
+  color: white;
+}
+
+.cb-sport-sticker {
+  background: #fffcf6;
+  border-color: var(--line);
+  color: var(--wine-dark);
+  box-shadow: 0 2px #69112b20;
+}
+
+.cb-sport-sticker:hover { background: var(--sky); }
+
+.cb-sport-sticker[aria-pressed="true"] {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: white;
+}
+
+.cb-sticker-mark { visibility: hidden; }
+.cb-sport-sticker[aria-pressed="true"] .cb-sticker-mark { visibility: visible; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .cb-court-poster, .cb-facility-card, .cb-card-arrow, .cb-court-link span, .cb-sport-sticker {
+    transition: transform 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .cb-facility-card:focus-visible { transform: translateY(-3px); }
+  .cb-court-link:focus-visible span { transform: translateY(2px); }
+
+  @media (hover: hover) {
+    .cb-home-hero:hover .cb-court-poster { transform: rotate(3deg) translateY(-3px); }
+    .cb-court-link:hover span { transform: translateY(2px); }
+    .cb-facility-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 3px 7px #69112b24;
+    }
+    .cb-sport-sticker:hover { transform: translateY(-2px); }
+  }
+}
+
 @media (max-width: 767px) {
   .cb-court-poster {
     width: min(70%, 12rem);
