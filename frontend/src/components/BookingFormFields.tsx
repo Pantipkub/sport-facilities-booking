@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useState } from "react";
+import { useActionState, useEffect, useId, useState } from "react";
+import { createBooking, type BookingFormState } from "@/app/bookings/actions";
+import Alert from "@/components/Alert";
 import TimeRangePicker from "@/components/TimeRangePicker";
 import { EMPTY_RANGE, durationText, normalizeTimeRange, type BookingClock, type TimeRange } from "@/libs/booking-time";
 import { baht, bangkokNow, fromMinutes, toMinutes } from "@/libs/format";
@@ -16,14 +18,43 @@ type Props = {
   booking?: Booking;
   facilities?: Facility[];
   initialNow: BookingClock;
+  action?: (previous: BookingFormState, formData: FormData) => Promise<BookingFormState>;
 };
 
-export default function BookingFormFields({ facility, booking, facilities = [], initialNow }: Props) {
+type FormResult = BookingFormState & {
+  submits: number;
+  values?: { date: string; facility: string; start: string; duration: string };
+};
+
+export default function BookingFormFields(props: Props) {
+  const [state, formAction, pending] = useActionState<FormResult, FormData>(async (previous, formData) => {
+    const values = {
+      date: String(formData.get("bookingDate") ?? ""),
+      facility: String(formData.get("facility") ?? ""),
+      start: String(formData.get("startTime") ?? ""),
+      duration: String(formData.get("durationHours") ?? ""),
+    };
+    const result = await (props.action ?? createBooking)(previous, formData);
+    return { ...result, values, submits: previous.submits + 1 };
+  }, { submits: 0 });
+
+  return <BookingFields key={state.submits} {...props} state={state} formAction={formAction} pending={pending} />;
+}
+
+function BookingFields({ facility, booking, facilities = [], initialNow, action, state, formAction, pending }: Props & {
+  state: FormResult;
+  formAction: (data: FormData) => void;
+  pending: boolean;
+}) {
   const id = useId();
   const [now, setNow] = useState(initialNow);
-  const [date, setDate] = useState(booking?.bookingDate.slice(0, 10) ?? initialNow.date);
-  const [facilityId, setFacilityId] = useState(facility._id);
+  const [date, setDate] = useState(state.values?.date ?? booking?.bookingDate.slice(0, 10) ?? initialNow.date);
+  const [facilityId, setFacilityId] = useState(state.values?.facility ?? facility._id);
   const [selection, setSelection] = useState<TimeRange>(() => {
+    if (state.values?.start) {
+      const start = toMinutes(state.values.start);
+      return { start, end: start + Number(state.values.duration) * 60 };
+    }
     if (!booking) return EMPTY_RANGE;
     const start = toMinutes(booking.startTime);
     return { start, end: start + booking.durationHours * 60 };
@@ -34,6 +65,11 @@ export default function BookingFormFields({ facility, booking, facilities = [], 
   const minutes = range.start !== null && range.end !== null ? range.end - range.start : 0;
   const time = range.start === null ? "ยังไม่ได้เลือก"
     : `${fromMinutes(range.start)} - ${range.end === null ? "?" : fromMinutes(range.end)}`;
+
+  function changeDate(nextDate: string) {
+    setDate(nextDate);
+    setSelection(normalizeTimeRange(range, nextDate, bangkokNow()));
+  }
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(bangkokNow()), 15000);
@@ -47,9 +83,11 @@ export default function BookingFormFields({ facility, booking, facilities = [], 
 
   return (
     <form
-      onSubmit={(event) => event.preventDefault()}
+      action={formAction}
+      onReset={(event) => event.preventDefault()}
       className="rounded-2xl border border-stone-200 bg-white p-6"
       aria-labelledby={`${id}-title`}
+      aria-busy={pending}
     >
       <h2 id={`${id}-title`} className="text-lg font-semibold">{booking ? "รายละเอียดการจอง" : "จองสนามนี้"}</h2>
       <input type="hidden" name="facility" value={facilityId} />
@@ -60,6 +98,7 @@ export default function BookingFormFields({ facility, booking, facilities = [], 
           <span className="text-sm font-medium text-stone-900">สนาม</span>
           <select
             value={facilityId}
+            disabled={pending}
             onChange={(event) => {
               setFacilityId(event.target.value);
               setSelection(EMPTY_RANGE);
@@ -78,26 +117,25 @@ export default function BookingFormFields({ facility, booking, facilities = [], 
           min={now.date}
           value={date}
           required
-          onChange={(event) => {
-            const nextDate = event.target.value;
-            setDate(nextDate);
-            setSelection((previous) => normalizeTimeRange(previous, nextDate, bangkokNow()));
-          }}
+          disabled={pending}
+          onInput={(event) => changeDate(event.currentTarget.value)}
+          onChange={(event) => changeDate(event.target.value)}
           className={INPUT}
         />
       </label>
       <div className="mt-5">
-        <TimeRangePicker date={date} now={now} value={range} onChange={setSelection} />
+        <TimeRangePicker date={date} now={now} value={range} onChange={setSelection} disabled={pending} />
       </div>
       <div className="mt-5 space-y-2 rounded-xl bg-stone-50 p-4 text-sm" aria-live="polite">
         <div className="flex justify-between gap-3"><span className="text-stone-500">เวลา</span><span className="font-medium">{time}</span></div>
         <div className="flex justify-between gap-3"><span className="text-stone-500">รวม</span><span className="font-medium">{minutes ? durationText(minutes) : "-"}</span></div>
         <div className="flex justify-between gap-3"><span className="text-stone-500">ราคา</span><span className="text-base font-semibold">{minutes ? baht(currentFacility.hourlyRate * minutes / 60) : "-"}</span></div>
       </div>
+      {state.error && <div className="mt-4"><Alert variant="error">{state.error}</Alert></div>}
       <div className="mt-5 flex gap-2">
         {booking && <Link href="/bookings" className={`${BTN} flex-1 border border-stone-300 bg-white text-stone-700 hover:bg-stone-100`}>ยกเลิก</Link>}
-        <button type="submit" disabled className={`${BTN} flex-1 bg-stone-900 text-white hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60`}>
-          {booking ? "บันทึกการแก้ไข" : "ยืนยันการจอง"}
+        <button type="submit" disabled={pending || !minutes || (!!booking && !action)} className={`${BTN} flex-1 bg-stone-900 text-white hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60`}>
+          {pending ? "กำลังบันทึก" : booking ? "บันทึกการแก้ไข" : "ยืนยันการจอง"}
         </button>
       </div>
     </form>
