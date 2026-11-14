@@ -14,7 +14,8 @@ export default function BookingList({ bookings, admin }: { bookings: Booking[]; 
   const [query, setQuery] = useState("");
   const [facilityId, setFacilityId] = useState("");
   const facilities = bookedFacilities(bookings);
-  const filtered = admin ? filterBookings(bookings, query, facilityId) : bookings;
+  const activeFacility = facilities.some((facility) => facility.id === facilityId) ? facilityId : "";
+  const filtered = admin ? filterBookings(bookings, query, activeFacility) : bookings;
 
   if (bookings.length === 0) {
     return (
@@ -38,7 +39,7 @@ export default function BookingList({ bookings, admin }: { bookings: Booking[]; 
           </label>
           <label className="min-w-0" htmlFor={`${id}-facility`}>
             <span className="sr-only">กรองตามสนาม</span>
-            <select id={`${id}-facility`} value={facilityId} onChange={(event) => setFacilityId(event.target.value)} className={`${INPUT} max-w-full`}>
+            <select id={`${id}-facility`} value={activeFacility} onChange={(event) => setFacilityId(event.target.value)} className={`${INPUT} max-w-full`}>
               <option value="">ทุกสนาม</option>
               {facilities.map((facility) => <option key={facility.id} value={facility.id}>{facility.name}</option>)}
             </select>

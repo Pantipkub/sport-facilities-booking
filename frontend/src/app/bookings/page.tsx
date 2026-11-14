@@ -6,6 +6,13 @@ import { requireUser } from "@/libs/auth";
 import { getErrorMessage } from "@/libs/errors";
 import type { Booking } from "@/types";
 
+const DELETE_ERRORS: Record<string, string> = {
+  session: "การเข้าสู่ระบบหมดอายุ กรุณาออกจากระบบแล้วเข้าสู่ระบบใหม่",
+  forbidden: "คุณไม่มีสิทธิ์ลบรายการจองนี้",
+  missing: "ไม่พบรายการจองนี้ อาจถูกลบไปแล้ว",
+  failed: "ลบการจองไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+};
+
 export default async function BookingsPage({ searchParams }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
@@ -15,6 +22,8 @@ export default async function BookingsPage({ searchParams }: {
   const message = query.created === "1" ? "จองสนามเรียบร้อยแล้ว"
     : query.updated === "1" ? "แก้ไขการจองเรียบร้อยแล้ว"
       : query.deleted === "1" ? "ลบการจองเรียบร้อยแล้ว" : undefined;
+  const deleteError = typeof query.deleteError === "string" && Object.hasOwn(DELETE_ERRORS, query.deleteError)
+    ? DELETE_ERRORS[query.deleteError] : undefined;
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
@@ -27,7 +36,8 @@ export default async function BookingsPage({ searchParams }: {
         </div>
         {!admin && <Link href="/" className="inline-flex h-11 items-center justify-center rounded-lg border border-stone-300 bg-white px-5 text-sm font-medium text-stone-700 hover:bg-stone-100">+ จองสนามเพิ่ม</Link>}
       </div>
-      {message && <div className="mt-6"><Alert variant="success">{message}</Alert></div>}
+      {message && !deleteError && <div className="mt-6"><Alert variant="success">{message}</Alert></div>}
+      {deleteError && <div className="mt-6"><Alert variant="error">{deleteError}</Alert></div>}
       <div className="mt-6">
         {result.ok ? <BookingList bookings={result.data} admin={admin} /> : (
           <Alert variant="error">{getErrorMessage(result.error, result.status, "โหลดรายการจองไม่สำเร็จ กรุณาลองใหม่อีกครั้ง")}</Alert>

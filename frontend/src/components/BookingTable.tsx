@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { deleteBooking } from "@/app/bookings/actions";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import SportBadge from "@/components/SportBadge";
 import { durationText } from "@/libs/booking-time";
 import { baht, endTime, thaiDate } from "@/libs/format";
@@ -50,6 +52,12 @@ export default function BookingTable({ bookings, admin = false }: { bookings: Bo
                 <Link href={`/bookings/${booking._id}/edit`} aria-label={`แก้ไขการจอง ${booking.facility?.name ?? "สนาม"} ${booking.startTime}`} className="inline-flex rounded-lg px-3 py-1.5 text-stone-700 hover:bg-stone-100">
                   แก้ไข
                 </Link>
+                <ConfirmDialog
+                  title={admin ? `ลบการจองของ ${booking.user?.name ?? "สมาชิก"}?` : "ลบการจองนี้?"}
+                  message={`${booking.facility?.name ?? "สนาม"} ${thaiDate(booking.bookingDate)} เวลา ${booking.startTime} - ${endTime(booking.startTime, booking.durationHours)} การลบไม่สามารถย้อนกลับได้`}
+                  action={deleteBooking.bind(null, booking._id)}
+                  confirmLabel="ลบการจอง"
+                />
               </td>
             </tr>
           ))}
