@@ -40,7 +40,6 @@
   color: var(--wine-dark);
   font-size: clamp(1.75rem, 4vw, 3rem);
   line-height: 1.2;
-  font-weight: 600;
 }
 
 .cb-booking-hero-court {

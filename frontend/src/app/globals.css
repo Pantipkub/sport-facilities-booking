@@ -29,6 +29,20 @@ body {
 
 .cb-title { color: var(--wine-dark); }
 
+main h1,
+main h2 {
+  font-family: var(--font-court-heading), system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: normal;
+}
+
+.cb-wordmark {
+  font-family: var(--font-court-wordmark), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
 .cb-booking-table {
   position: relative;
   border: 1px solid var(--line);

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans_Thai } from "next/font/google";
+import { Fraunces, IBM_Plex_Sans_Thai, Mitr } from "next/font/google";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import NavBar from "@/components/NavBar";
@@ -9,6 +9,18 @@ import "./globals.css";
 const plex = IBM_Plex_Sans_Thai({
   weight: ["400", "500", "600"],
   subsets: ["thai", "latin"],
+});
+
+const mitr = Mitr({
+  weight: "500",
+  subsets: ["thai", "latin"],
+  variable: "--font-court-heading",
+});
+
+const fraunces = Fraunces({
+  weight: "600",
+  subsets: ["latin"],
+  variable: "--font-court-wordmark",
 });
 
 export const metadata: Metadata = {
@@ -21,7 +33,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html lang="th">
-      <body className={plex.className}>
+      <body className={`${plex.className} ${mitr.variable} ${fraunces.variable}`}>
         <NextAuthProvider session={session}>
           <NavBar />
           {children}

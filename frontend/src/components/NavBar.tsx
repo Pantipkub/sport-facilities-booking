@@ -28,7 +28,7 @@ export default function NavBar() {
       <nav aria-label="เมนูหลัก" className="mx-auto flex max-w-6xl flex-wrap items-center gap-2.5 px-4 py-3 sm:px-6">
         <Link href={user?.role === "admin" ? "/admin" : "/"} className="cb-title flex shrink-0 items-center gap-2 font-semibold hover:opacity-80">
           <span aria-hidden="true" className="cb-primary grid size-8 -rotate-6 place-items-center rounded-lg border border-white text-sm shadow-sm">C</span>
-          CourtBook
+          <span className="cb-wordmark">CourtBook</span>
         </Link>
         <div className="order-last flex min-w-0 basis-full flex-wrap gap-1 border-t border-[var(--line)] pt-2 sm:order-none sm:basis-auto sm:border-0 sm:pt-0">
         {links.map(([href, label]) => (
