@@ -5,6 +5,7 @@ import { useActionState, useEffect, useId, useState } from "react";
 import { createBooking, type BookingFormState } from "@/app/bookings/actions";
 import Alert from "@/components/Alert";
 import TimeRangePicker from "@/components/TimeRangePicker";
+import "@/components/booking-scrapbook.css";
 import { EMPTY_RANGE, durationText, isBookingDate, normalizeTimeRange, validateBookingInput, type BookingClock, type BookingInputErrors, type BusyTimes, type TimeRange } from "@/libs/booking-time";
 import { baht, bangkokNow, fromMinutes, toMinutes } from "@/libs/format";
 import { sportOf } from "@/libs/sports";
@@ -145,11 +146,11 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
         if (Object.keys(inputErrors).length) event.preventDefault();
       }}
       onReset={(event) => event.preventDefault()}
-      className="rounded-2xl border border-stone-200 bg-white p-6"
+      className="p-4 sm:p-6 cb-booking-theme cb-booking-panel"
       aria-labelledby={`${id}-title`}
       aria-busy={pending}
     >
-      <h2 id={`${id}-title`} className="text-lg font-semibold">{booking ? "รายละเอียดการจอง" : "จองสนามนี้"}</h2>
+      <h2 id={`${id}-title`} className="text-xl font-semibold text-[var(--wine-dark)]">{booking ? "รายละเอียดการจอง" : "จองสนามนี้"}</h2>
       <input type="hidden" name="facility" value={facilityId} />
       <input type="hidden" name="startTime" value={range.start === null ? "" : fromMinutes(range.start)} />
       <input type="hidden" name="durationHours" value={minutes ? minutes / 60 : ""} />
@@ -193,7 +194,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
         />
         {errors.bookingDate && <span id={`${id}-date-error`} className="mt-1 block text-xs text-red-600" role="alert">{errors.bookingDate}</span>}
       </label>
-      <div className="mt-5">
+      <div className="mt-5 rounded-xl border border-[var(--line)] p-2.5 sm:p-3 cb-booking-graph">
         <TimeRangePicker date={date} now={now} value={range} busy={busy} onChange={(nextRange) => {
           setSelection(nextRange);
           setClientErrors({});
@@ -206,7 +207,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
         )}
         {errors.time && <p id={`${id}-time-error`} className="mt-2 text-xs text-red-600" role="alert">{errors.time}</p>}
       </div>
-      <div className="mt-5 space-y-2 rounded-xl bg-stone-50 p-4 text-sm" aria-live="polite">
+      <div className="mt-5 space-y-2 p-4 text-sm cb-booking-summary" aria-live="polite">
         <div className="flex justify-between gap-3"><span className="text-stone-500">เวลา</span><span className="font-medium">{time}</span></div>
         <div className="flex justify-between gap-3"><span className="text-stone-500">รวม</span><span className="font-medium">{minutes ? durationText(minutes) : "-"}</span></div>
         <div className="flex justify-between gap-3"><span className="text-stone-500">ราคา</span><span className="text-base font-semibold">{minutes && currentFacility ? baht(currentFacility.hourlyRate * minutes / 60) : "-"}</span></div>
@@ -214,7 +215,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
       {state.error && !edited && <div className="mt-4"><Alert variant="error">{state.error}</Alert></div>}
       <div className="mt-5 flex gap-2">
         {booking && <Link href="/bookings" className={`${BTN} flex-1 border border-stone-300 bg-white text-stone-700 hover:bg-stone-100`}>ยกเลิก</Link>}
-        <button type="submit" disabled={pending || loading || failed || (!!booking && !action)} className={`${BTN} flex-1 bg-stone-900 text-white hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60`}>
+        <button type="submit" disabled={pending || loading || failed || (!!booking && !action)} className={`${BTN} flex-1 disabled:cursor-not-allowed disabled:opacity-60 cb-booking-primary`}>
           {pending ? "กำลังบันทึก" : booking ? "บันทึกการแก้ไข" : "ยืนยันการจอง"}
         </button>
       </div>
