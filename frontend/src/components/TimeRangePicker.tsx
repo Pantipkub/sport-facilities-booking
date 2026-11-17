@@ -57,10 +57,10 @@ export default function TimeRangePicker({ date, now, value, onChange, busy = {},
     <div role="group" aria-labelledby={`${id}-label`} aria-describedby={[`${id}-hint`, errorId].filter(Boolean).join(" ")}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
         <span id={`${id}-label`} className="text-sm font-medium text-stone-900">2. เลือกเวลาเริ่ม แล้วเลือกเวลาสิ้นสุด</span>
-        <span className="text-xs text-stone-400">สูงสุด 2 ชั่วโมง</span>
+        <span className="text-xs text-stone-600">สูงสุด 2 ชั่วโมง</span>
       </div>
       <p id={`${id}-hint`} aria-live="polite" className="mt-1 text-xs text-stone-500">{hint}</p>
-      <div className={`mt-2 grid grid-cols-6 gap-y-1 ${invalid ? "rounded-lg ring-1 ring-red-400" : ""}`}>
+      <div className={`mt-2 grid grid-cols-4 gap-y-1 min-[360px]:grid-cols-5 min-[420px]:grid-cols-6 ${invalid ? "rounded-lg ring-1 ring-red-400" : ""}`}>
         {TIME_SLOTS.map((time) => {
           const state = timeCellState(time, range, date, now, busy);
           const band = state === "range" ? "bg-[#f2dce4]"
@@ -70,7 +70,7 @@ export default function TimeRangePicker({ date, now, value, onChange, busy = {},
             ? time === 1440 ? "ใช้เป็นเวลาสิ้นสุดเท่านั้น" : "ยังไม่ได้เลือกวันที่หรือเลยเวลาแล้ว"
             : "แตะเพื่อเลือกเวลา");
           return (
-            <div key={time} className={`flex h-10 items-center justify-center ${band}`}>
+            <div key={time} className={`flex min-h-11 items-center justify-center ${band}`}>
               <button
                 type="button"
                 title={title}
@@ -78,7 +78,7 @@ export default function TimeRangePicker({ date, now, value, onChange, busy = {},
                 aria-pressed={state === "start" || state === "end"}
                 disabled={disabled || state === "taken" || state === "mine" || state === "off"}
                 onClick={() => onChange(selectTime(time, range, date, now, busy))}
-                className={`h-9 w-full max-w-12 rounded-lg text-[13px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900 disabled:cursor-not-allowed ${CELL[state]}`}
+                className={`min-h-11 w-full max-w-12 rounded-lg text-[13px] font-medium focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900 disabled:cursor-not-allowed ${CELL[state]}`}
               >
                 {fromMinutes(time)}
               </button>

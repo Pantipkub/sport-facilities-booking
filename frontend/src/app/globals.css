@@ -179,6 +179,16 @@ main h2 {
 .cb-sport-sticker[aria-pressed="true"] { padding-inline: 1rem; }
 .cb-sport-sticker[aria-pressed="true"] .cb-sticker-ball { display: block; }
 
+.cb-sport-sticker:focus-visible,
+#courts input:focus-visible,
+#courts .cb-primary:focus-visible {
+  outline: 2px solid var(--wine-dark);
+  outline-offset: 3px;
+}
+
+.cb-sport-sticker:focus-visible { padding-inline: 1rem; }
+.cb-sport-sticker:focus-visible .cb-sticker-ball { display: block; }
+
 @media (hover: hover) {
   .cb-sport-sticker:hover { padding-inline: 1rem; }
   .cb-sport-sticker:hover .cb-sticker-ball { display: block; }
