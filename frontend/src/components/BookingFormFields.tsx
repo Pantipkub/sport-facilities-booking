@@ -150,7 +150,7 @@ function BookingFields({ facility, booking, facilities = [], initialNow, action,
       aria-labelledby={`${id}-title`}
       aria-busy={pending}
     >
-      <h2 id={`${id}-title`} className="text-xl font-semibold text-[var(--wine-dark)]">{booking ? "รายละเอียดการจอง" : "จองสนามนี้"}</h2>
+      <h2 id={`${id}-title`} className="text-xl font-semibold text-[var(--brand-dark)]">{booking ? "รายละเอียดการจอง" : "จองสนามนี้"}</h2>
       <input type="hidden" name="facility" value={facilityId} />
       <input type="hidden" name="startTime" value={range.start === null ? "" : fromMinutes(range.start)} />
       <input type="hidden" name="durationHours" value={minutes ? minutes / 60 : ""} />

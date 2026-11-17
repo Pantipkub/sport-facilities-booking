@@ -27,7 +27,7 @@ export default async function FacilityPage({ params }: PageProps<"/facilities/[i
   const role = session?.user.role;
 
   return (
-    <main className="mx-auto grid max-w-6xl gap-6 px-6 py-10 lg:grid-cols-[1fr_380px]">
+    <main className="mx-auto grid max-w-6xl gap-6 px-4 py-7 sm:px-6 sm:py-10 lg:grid-cols-[minmax(0,1fr)_400px]">
       <div>
         <Link href="/" className="text-sm text-stone-500 hover:text-stone-900">
           ← สนามทั้งหมด
@@ -38,7 +38,7 @@ export default async function FacilityPage({ params }: PageProps<"/facilities/[i
             <SportBadge sportType={f.sportType} />
             <h1 className="mt-3 cb-title text-3xl font-semibold tracking-tight">{f.name}</h1>
             <p className="mt-1 text-stone-500">{f.location}</p>
-            <dl className="mt-8 grid grid-cols-3 gap-4 border-t border-stone-100 pt-6">
+            <dl className="mt-6 grid grid-cols-3 gap-3 rounded-xl bg-[var(--sky)] p-3 sm:p-5">
               <div>
                 <dt className="text-sm text-stone-500">ประเภทกีฬา</dt>
                 <dd className="mt-1 font-medium">{sportOf(f.sportType).label}</dd>
@@ -64,7 +64,7 @@ export default async function FacilityPage({ params }: PageProps<"/facilities/[i
         </div>
       </div>
 
-      <aside className="lg:pt-9">
+      <aside className="min-w-0 lg:pt-9">
         {role === "member" ? (
           <BookingForm facility={f} />
         ) : role === "admin" ? (

@@ -1,33 +1,33 @@
 @import "tailwindcss";
 
 body {
-  --wine: #8e163b;
-  --wine-dark: #69112b;
-  --paper: #faf3e5;
-  --ink: #37252c;
-  --line: #dcc4bd;
-  --sky: #cfdeeb;
-  background: #f5efe2;
+  --brand: #255544;
+  --brand-dark: #173a2f;
+  --paper: #f6f3e5;
+  --ink: #222d25;
+  --line: #c9cec1;
+  --sky: #dce8c7;
+  background: #f1f0e5;
   color: var(--ink);
   @apply antialiased;
 }
 
 .cb-primary {
-  background: var(--wine);
+  background: var(--brand);
   border-radius: 9999px;
   color: white;
 }
 
-.cb-primary:hover { background: var(--wine-dark); }
+.cb-primary:hover { background: var(--brand-dark); }
 
 .cb-paper {
   background: #fffcf6;
   border: 1px solid var(--line);
   border-radius: 1.25rem;
-  box-shadow: 0 4px #69112b12;
+  box-shadow: 0 4px #173a2f12;
 }
 
-.cb-title { color: var(--wine-dark); }
+.cb-title { color: var(--brand-dark); }
 
 main h1,
 main h2 {
@@ -51,7 +51,7 @@ main h2 {
 }
 
 .cb-booking-table thead {
-  background: var(--wine);
+  background: var(--brand);
   color: white;
 }
 
@@ -59,8 +59,8 @@ main h2 {
 
 .cb-grid-paper {
   background-color: var(--paper);
-  background-image: linear-gradient(#8e163b16 1px, transparent 1px),
-    linear-gradient(90deg, #8e163b16 1px, transparent 1px);
+  background-image: linear-gradient(#25554416 1px, transparent 1px),
+    linear-gradient(90deg, #25554416 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -74,101 +74,106 @@ main h2 {
   height: 1rem;
   top: -.45rem;
   left: 1.25rem;
-  background: #b5caddd9;
+  background: #dce8c7de;
   transform: rotate(-7deg);
 }
 
 .cb-home-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: repeating-linear-gradient(90deg, var(--paper) 0 21px, var(--sky) 21px 42px);
-  border: 1px solid var(--line);
-  border-radius: 1.5rem;
-  padding: clamp(1.25rem, 6vw, 4.5rem);
+  display: grid;
+  gap: .875rem;
+  padding: .875rem;
+  border-radius: 1.75rem;
+  background: var(--brand-dark);
+  color: var(--paper);
+}
+
+.cb-home-copy {
+  align-self: center;
+  padding: clamp(1rem, 4vw, 3rem);
 }
 
 .cb-home-title {
-  font-size: clamp(2.15rem, 6vw, 4.75rem);
-  line-height: 1.13;
+  font-size: clamp(2rem, 4.7vw, 4rem);
+  line-height: 1.19;
+  text-wrap: balance;
 }
 
-.cb-court-poster {
+.cb-home-title span {
+  display: block;
+  margin-top: .35rem;
+  color: #e7f18a;
+}
+
+.cb-court-link {
+  background: #e7f18a;
+  color: var(--brand-dark);
+}
+
+.cb-court-link:hover { background: #f2f7b6; }
+.cb-court-link:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
+
+.cb-hero-photo {
   position: relative;
-  width: min(100%, 19rem);
+  isolation: isolate;
+  min-width: 0;
   aspect-ratio: 4 / 3;
-  margin: auto;
-  background-color: var(--wine);
-  border: .55rem solid var(--paper);
-  box-shadow: 0 0 0 1px var(--wine), .55rem .65rem #69112b25;
-  border-radius: 1rem;
-  transform: rotate(7deg);
+  border-radius: 1.2rem;
+  background: var(--brand);
 }
 
-.cb-court-poster::before {
-  content: "";
-  position: absolute;
-  inset: 11%;
-  border: 2px solid var(--paper);
-  background: radial-gradient(circle at center, transparent 18%, var(--paper) 19%, transparent 20%),
-    linear-gradient(90deg, transparent 49.5%, var(--paper) 49.5% 50.5%, transparent 50.5%);
+.cb-hero-photo img {
+  border-radius: inherit;
+  object-position: 55% center;
 }
 
-.cb-court-poster::after {
-  content: "";
+.cb-hero-ball {
   position: absolute;
-  right: 4%;
-  bottom: -8%;
-  width: 27%;
+  right: .7rem;
+  bottom: .7rem;
+  display: grid;
+  place-items: center;
+  width: clamp(3.25rem, 8vw, 5rem);
   aspect-ratio: 1;
+  border: 2px solid var(--brand-dark);
   border-radius: 50%;
-  border: 2px solid #637b91;
-  background: radial-gradient(ellipse at 6% 52%, transparent 52%, #637b91 53% 55%, transparent 56%),
-    radial-gradient(ellipse at 94% 48%, transparent 52%, #637b91 53% 55%, transparent 56%), var(--sky);
-  box-shadow: 4px 4px #69112b28;
-  transform: rotate(-24deg);
+  box-shadow: 3px 3px var(--brand-dark);
+  background: #e7f18a;
+  color: var(--brand-dark);
+  transform: rotate(-18deg);
 }
 
-.cb-poster-star {
-  position: absolute;
-  z-index: 1;
-  top: -11%;
-  right: -8%;
-  width: 29%;
-  aspect-ratio: 1;
-  background: #f9d980;
-  clip-path: polygon(50% 0, 60% 32%, 85% 15%, 71% 39%, 100% 50%, 71% 61%, 85% 85%, 60% 69%, 50% 100%, 40% 69%, 15% 85%, 29% 61%, 0 50%, 29% 39%, 15% 15%, 40% 32%);
-  rotate: -12deg;
+.cb-discovery-panel {
+  padding: clamp(1rem, 4vw, 1.75rem);
+  border: 1px solid var(--line);
+  border-radius: 1.35rem;
+  background: #fdfbf2;
 }
 
-.cb-poster-stamp {
-  position: absolute;
-  z-index: 1;
-  bottom: 7%;
-  left: -9%;
-  width: 29%;
-  aspect-ratio: 1.5;
-  rotate: -24deg;
-  background: var(--sky);
-  border: 3px dotted var(--wine);
-  border-radius: .35rem;
+@media (min-width: 768px) {
+  .cb-home-hero {
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+    min-height: 27rem;
+  }
+
+  .cb-hero-photo { aspect-ratio: auto; }
 }
+
 
 .cb-card-ball {
   background: var(--sky);
-  color: var(--wine-dark);
+  color: var(--brand-dark);
 }
 
 .cb-facility-card:is(:hover, :focus-visible) .cb-card-ball {
-  background: var(--wine);
+  background: var(--brand);
   color: white;
 }
 
 .cb-sport-sticker {
   background: #fffcf6;
   border-color: var(--line);
-  color: var(--wine-dark);
-  box-shadow: 0 2px #69112b20;
+  color: var(--brand-dark);
+  box-shadow: 0 2px #173a2f20;
   padding-inline: 1.75rem;
 }
 
@@ -182,7 +187,7 @@ main h2 {
 .cb-sport-sticker:focus-visible,
 #courts input:focus-visible,
 #courts .cb-primary:focus-visible {
-  outline: 2px solid var(--wine-dark);
+  outline: 2px solid var(--brand-dark);
   outline-offset: 3px;
 }
 
@@ -195,13 +200,13 @@ main h2 {
 }
 
 .cb-sport-sticker[aria-pressed="true"] {
-  background: var(--wine);
-  border-color: var(--wine);
+  background: var(--brand);
+  border-color: var(--brand);
   color: white;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .cb-court-poster, .cb-facility-card, .cb-card-ball, .cb-card-ball svg, .cb-court-link svg, .cb-sport-sticker {
+  .cb-facility-card, .cb-card-ball, .cb-card-ball svg, .cb-court-link svg, .cb-sport-sticker {
     transition: transform 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
   }
 
@@ -210,21 +215,13 @@ main h2 {
   .cb-facility-card:focus-visible .cb-card-ball svg { transform: rotate(24deg); }
 
   @media (hover: hover) {
-    .cb-home-hero:hover .cb-court-poster { transform: rotate(3deg) translateY(-3px); }
     .cb-court-link:hover svg,
     .cb-facility-card:hover .cb-card-ball svg { transform: rotate(24deg); }
     .cb-facility-card:hover {
       transform: translateY(-3px);
-      box-shadow: 3px 7px #69112b24;
+      box-shadow: 3px 7px #173a2f24;
     }
     .cb-sport-sticker:hover { transform: translateY(-2px); }
-  }
-}
-
-@media (max-width: 767px) {
-  .cb-court-poster {
-    width: min(70%, 12rem);
-    margin-block-end: .65rem;
   }
 }
 

@@ -19,8 +19,8 @@
   padding: 1.1rem 1.35rem;
   margin-block: .35rem;
   background: var(--paper);
-  box-shadow: 3px 5px 0 #69112b20;
-  border: 1px dashed var(--wine);
+  box-shadow: 3px 5px 0 #173a2f20;
+  border: 1px dashed var(--brand);
   border-radius: .4rem;
 }
 
@@ -32,12 +32,12 @@
   left: 1rem;
   width: 3.75rem;
   height: 1rem;
-  background: #b5caddc9;
+  background: #dce8c7de;
   transform: rotate(-7deg);
 }
 
 .cb-booking-heading {
-  color: var(--wine-dark);
+  color: var(--brand-dark);
   font-size: clamp(1.75rem, 4vw, 3rem);
   line-height: 1.2;
 }
@@ -52,8 +52,8 @@
   transform: rotate(21deg);
   border-radius: .85rem;
   opacity: .85;
-  background: var(--wine);
-  box-shadow: 0 0 0 .24rem var(--paper), 0 0 0 .32rem var(--wine);
+  background: var(--brand);
+  box-shadow: 0 0 0 .24rem var(--paper), 0 0 0 .32rem var(--brand);
 }
 
 .cb-booking-hero-court::before {
@@ -70,38 +70,38 @@
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 1.25rem;
-  box-shadow: 0 4px 0 #69112b14;
+  box-shadow: 0 4px 0 #173a2f14;
 }
 
 .cb-booking-graph {
   background-color: var(--paper);
-  background-image: linear-gradient(#8e163b15 1px, transparent 1px), linear-gradient(90deg, #8e163b15 1px, transparent 1px);
+  background-image: linear-gradient(#25554415 1px, transparent 1px), linear-gradient(90deg, #25554415 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
 .cb-booking-primary {
-  background: var(--wine);
+  background: var(--brand);
   color: white;
-  border: 1px solid var(--wine);
+  border: 1px solid var(--brand);
   border-radius: 9999px;
 }
 
 .cb-booking-primary:hover, .cb-booking-primary:focus-visible {
-  background: var(--wine-dark);
+  background: var(--brand-dark);
 }
 
 .cb-booking-summary {
   background: var(--sky);
-  border: 1px dashed #6987a1;
+  border: 1px dashed #678373;
   border-radius: .85rem;
 }
 
 .cb-booking-selected {
-  background: #8e163b;
+  background: var(--brand);
   color: white;
 }
 
 .cb-booking-selected-range {
-  background: #f2dce4;
-  color: #69112b;
+  background: #e2ead0;
+  color: var(--brand-dark);
 }

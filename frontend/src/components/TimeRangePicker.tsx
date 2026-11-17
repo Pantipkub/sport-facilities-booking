@@ -63,9 +63,9 @@ export default function TimeRangePicker({ date, now, value, onChange, busy = {},
       <div className={`mt-2 grid grid-cols-4 gap-y-1 min-[360px]:grid-cols-5 min-[420px]:grid-cols-6 ${invalid ? "rounded-lg ring-1 ring-red-400" : ""}`}>
         {TIME_SLOTS.map((time) => {
           const state = timeCellState(time, range, date, now, busy);
-          const band = state === "range" ? "bg-[#f2dce4]"
-            : state === "start" && range.end !== null ? "bg-[linear-gradient(to_right,transparent_50%,#f2dce4_50%)]"
-              : state === "end" ? "bg-[linear-gradient(to_right,#f2dce4_50%,transparent_50%)]" : "";
+          const band = state === "range" ? "bg-[#e2ead0]"
+            : state === "start" && range.end !== null ? "bg-[linear-gradient(to_right,transparent_50%,#e2ead0_50%)]"
+              : state === "end" ? "bg-[linear-gradient(to_right,#e2ead0_50%,transparent_50%)]" : "";
           const title = TITLES[state] ?? (state === "off"
             ? time === 1440 ? "ใช้เป็นเวลาสิ้นสุดเท่านั้น" : "ยังไม่ได้เลือกวันที่หรือเลยเวลาแล้ว"
             : "แตะเพื่อเลือกเวลา");
