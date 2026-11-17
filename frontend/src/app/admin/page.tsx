@@ -73,7 +73,7 @@ export default async function DashboardPage() {
               <div key={facility._id} className="grid grid-cols-[minmax(0,1fr)_minmax(2rem,1fr)_3rem] items-center gap-3 text-sm">
                 <span className="truncate">{facility.name}</span>
                 <div className="h-2.5 rounded-full bg-stone-100">
-                  <div className="h-2.5 rounded-full bg-[var(--brand)]" style={{ width: `${(h / maxHours) * 100}%` }} />
+                  <div className="h-2.5 rounded-full bg-[var(--wine)]" style={{ width: `${(h / maxHours) * 100}%` }} />
                 </div>
                 <span className="text-right text-stone-500">{h} ชม.</span>
               </div>

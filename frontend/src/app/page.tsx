@@ -1,44 +1,33 @@
 import Alert from "@/components/Alert";
-import Image from "next/image";
 import TennisBallIcon from "@/components/TennisBallIcon";
 import { api } from "@/libs/api";
 import type { Facility } from "@/types";
 import FacilityList from "./FacilityList";
-import courtClubImage from "./court-club.webp";
 
 export default async function Home() {
   const result = await api<Facility[]>("/facilities");
   const title = (
-    <section className="cb-home-hero">
-      <div className="cb-home-copy min-w-0">
-        <h1 className="cb-home-title">
-          จองสนามกีฬา<span>นัดเพื่อนลงสนาม</span>
-        </h1>
-        <p className="mt-5 max-w-sm text-base leading-relaxed text-[#eef0dd]">
-          เลือกสนามที่สามย่าน บรรทัดทอง หรือสยาม แล้วจองเวลาเล่นได้ครั้งละไม่เกิน 2 ชั่วโมง
+    <section className="cb-home-hero grid items-center gap-8 md:grid-cols-[1.25fr_1fr]">
+      <div className="cb-paper cb-ticket relative z-10 p-5 sm:p-8">
+        <h1 className="cb-home-title cb-title font-semibold tracking-tight">จองสนามกีฬา</h1>
+        <p className="mt-3 max-w-sm text-sm leading-relaxed sm:text-base">
+          เลือกสนามที่สามย่าน บรรทัดทอง หรือสยาม แล้วจองได้ครั้งละไม่เกิน 2 ชั่วโมง
         </p>
         {result.ok && (
-          <a href="#courts" className="cb-court-link mt-7 inline-flex min-h-12 items-center gap-3 rounded-full px-6 font-semibold">
-            ค้นหาสนาม <TennisBallIcon className="size-5 shrink-0" />
+          <a href="#courts" className="cb-primary cb-court-link mt-5 inline-flex min-h-11 items-center gap-2 px-5 text-sm font-medium">
+            เลือกสนาม <TennisBallIcon className="size-5 shrink-0" />
           </a>
         )}
       </div>
-      <div className="cb-hero-photo">
-        <Image
-          src={courtClubImage}
-          alt=""
-          fill
-          preload
-          sizes="(min-width: 1152px) 580px, (min-width: 768px) 52vw, 95vw"
-          className="object-cover"
-        />
-        <div className="cb-hero-ball" aria-hidden="true"><TennisBallIcon className="size-10 sm:size-12" /></div>
+      <div aria-hidden="true" className="cb-court-poster">
+        <span className="cb-poster-star" />
+        <span className="cb-poster-stamp" />
       </div>
     </section>
   );
 
   return (
-    <main id="main-content" className="mx-auto max-w-6xl px-4 pt-5 pb-12 sm:px-6 sm:pt-8">
+    <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
       {title}
       {result.ok ? (
         <FacilityList facilities={result.data} />
