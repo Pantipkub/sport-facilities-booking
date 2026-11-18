@@ -1,4 +1,5 @@
 import { SPORTS } from "@/libs/sports";
+import TennisBallIcon from "@/components/TennisBallIcon";
 
 const OPTIONS = [["all", "ทั้งหมด"], ...Object.entries(SPORTS).map(([key, s]) => [key, s.label])];
 
@@ -11,13 +12,10 @@ export default function SportFilter({ value, onChange }: { value: string; onChan
           type="button"
           aria-pressed={key === value}
           onClick={() => onChange(key)}
-          className={`h-9 rounded-full border px-4 text-sm font-medium ${
-            key === value
-              ? "border-stone-900 bg-stone-900 text-white"
-              : "border-stone-300 bg-white text-stone-600 hover:bg-stone-100 hover:text-stone-900"
-          }`}
+          className="cb-sport-sticker inline-flex min-h-10 items-center justify-center gap-2 rounded-full border text-center text-sm font-medium"
         >
-          {label}
+          <TennisBallIcon className="cb-sticker-ball size-4 shrink-0" />
+          <span>{label}</span>
         </button>
       ))}
     </div>

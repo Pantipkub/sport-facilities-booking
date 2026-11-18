@@ -13,7 +13,7 @@ import { sportOf } from "@/libs/sports";
 import type { Facility } from "@/types";
 
 const BTN = "inline-flex h-11 items-center justify-center rounded-lg px-5 text-sm font-medium";
-const PRIMARY = `${BTN} bg-stone-900 text-white hover:bg-stone-700`;
+const PRIMARY = `${BTN} cb-primary`;
 const SECONDARY = `${BTN} border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 hover:text-stone-900`;
 
 export default async function FacilityPage({ params }: PageProps<"/facilities/[id]">) {
@@ -29,14 +29,17 @@ export default async function FacilityPage({ params }: PageProps<"/facilities/[i
   return (
     <main className="mx-auto grid max-w-6xl gap-6 px-6 py-10 lg:grid-cols-[1fr_380px]">
       <div>
-        <Link href="/" className="text-sm text-stone-500 hover:text-stone-900">
-          ← สนามทั้งหมด
+        <Link href="/" className="cb-back-link">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="size-4">
+            <path d="m10 5-7 7 7 7M3 12h18" />
+          </svg>
+          กลับไปสนามทั้งหมด
         </Link>
-        <div className="mt-4 overflow-hidden rounded-2xl border border-stone-200 bg-white">
+        <div className="mt-4 overflow-hidden cb-paper">
           <FacilityImage facility={f} className="aspect-[21/9]" />
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
             <SportBadge sportType={f.sportType} />
-            <h1 className="mt-3 text-3xl font-semibold tracking-tight">{f.name}</h1>
+            <h1 className="mt-3 cb-title text-3xl font-semibold tracking-tight">{f.name}</h1>
             <p className="mt-1 text-stone-500">{f.location}</p>
             <dl className="mt-8 grid grid-cols-3 gap-4 border-t border-stone-100 pt-6">
               <div>
@@ -52,7 +55,7 @@ export default async function FacilityPage({ params }: PageProps<"/facilities/[i
                 <dd className="mt-1 font-medium">{baht(f.hourlyRate)} / ชม.</dd>
               </div>
             </dl>
-            <div className="mt-8 rounded-xl bg-stone-50 p-5">
+            <div className="mt-8 cb-grid-paper rounded-xl border border-[var(--line)] p-4 sm:p-5">
               <h2 className="text-sm font-semibold">เงื่อนไขการจอง</h2>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-stone-600">
                 <li>จองได้ตั้งแต่วันนี้เป็นต้นไป เลือกเวลาเริ่มและเวลาสิ้นสุดได้ทุก 30 นาที</li>
@@ -68,7 +71,7 @@ export default async function FacilityPage({ params }: PageProps<"/facilities/[i
         {role === "member" ? (
           <BookingForm facility={f} />
         ) : role === "admin" ? (
-          <div className="rounded-2xl border border-stone-200 bg-white p-6">
+          <div className="cb-paper p-6">
             <h2 className="text-lg font-semibold">จัดการสนามนี้</h2>
             <p className="mt-1 text-sm text-stone-500">ผู้ดูแลระบบแก้ไขหรือลบสนามได้ แต่ไม่สามารถจองสนามได้</p>
             <div className="mt-5 grid gap-2">
@@ -86,7 +89,7 @@ export default async function FacilityPage({ params }: PageProps<"/facilities/[i
             </div>
           </div>
         ) : (
-          <div className="rounded-2xl border border-stone-200 bg-white p-6">
+          <div className="cb-paper p-6">
             <h2 className="text-lg font-semibold">จองสนามนี้</h2>
             <p className="mt-1 text-sm text-stone-500">เข้าสู่ระบบก่อนเพื่อเลือกวันและเวลาที่ต้องการ</p>
             <div className="mt-5 grid gap-2">

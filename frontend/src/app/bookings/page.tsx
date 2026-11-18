@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Alert from "@/components/Alert";
 import BookingList from "@/components/BookingList";
+import "@/components/booking-scrapbook.css";
 import { api } from "@/libs/api";
 import { requireUser } from "@/libs/auth";
 import { getErrorMessage } from "@/libs/errors";
@@ -26,15 +27,16 @@ export default async function BookingsPage({ searchParams }: {
     ? DELETE_ERRORS[query.deleteError] : undefined;
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">{admin ? "การจองทั้งหมด" : "การจองของฉัน"}</h1>
+    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+      <div className="cb-booking-hero">
+        <span className="cb-booking-hero-court" aria-hidden="true" />
+        <div className="cb-booking-note">
+          <h1 className="cb-booking-heading">{admin ? "การจองทั้งหมด" : "การจองของฉัน"}</h1>
           <p className="mt-1 text-stone-500">
             {admin ? "ดู แก้ไข หรือลบการจองของสมาชิกทุกคน" : result.ok ? `${result.data.length} รายการ` : "ดูและจัดการการจองของคุณ"}
           </p>
         </div>
-        {!admin && <Link href="/" className="inline-flex h-11 items-center justify-center rounded-lg border border-stone-300 bg-white px-5 text-sm font-medium text-stone-700 hover:bg-stone-100">+ จองสนามเพิ่ม</Link>}
+        {!admin && <Link href="/" className="inline-flex h-11 items-center justify-center px-5 text-sm font-medium cb-booking-primary">+ จองสนามเพิ่ม</Link>}
       </div>
       {message && !deleteError && <div className="mt-6"><Alert variant="success">{message}</Alert></div>}
       {deleteError && <div className="mt-6"><Alert variant="error">{deleteError}</Alert></div>}

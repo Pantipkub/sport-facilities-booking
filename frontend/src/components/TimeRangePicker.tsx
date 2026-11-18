@@ -1,6 +1,7 @@
 "use client";
 
 import { useId } from "react";
+import "@/components/booking-scrapbook.css";
 import { fromMinutes } from "@/libs/format";
 import {
   TIME_SLOTS, canEnd, normalizeTimeRange, selectTime, timeCellState,
@@ -9,13 +10,13 @@ import {
 
 const CELL: Record<TimeCellState, string> = {
   free: "text-stone-900 hover:bg-stone-100",
-  start: "bg-stone-900 text-white",
-  end: "bg-stone-900 text-white",
-  range: "text-stone-900 hover:bg-stone-200",
+  start: "cb-booking-selected",
+  end: "cb-booking-selected",
+  range: "cb-booking-selected-range",
   endOk: "text-stone-900 ring-1 ring-inset ring-stone-400 hover:bg-stone-100",
   later: "text-stone-500 hover:bg-stone-100",
-  taken: "bg-stone-100 text-stone-400 line-through cursor-not-allowed",
-  mine: "bg-amber-50 text-amber-700/70 line-through cursor-not-allowed",
+  taken: "bg-stone-200 text-stone-600 line-through cursor-not-allowed",
+  mine: "bg-amber-100 text-amber-900 line-through cursor-not-allowed",
   off: "text-stone-300 cursor-not-allowed",
 };
 
@@ -62,9 +63,9 @@ export default function TimeRangePicker({ date, now, value, onChange, busy = {},
       <div className={`mt-2 grid grid-cols-6 gap-y-1 ${invalid ? "rounded-lg ring-1 ring-red-400" : ""}`}>
         {TIME_SLOTS.map((time) => {
           const state = timeCellState(time, range, date, now, busy);
-          const band = state === "range" ? "bg-stone-100"
-            : state === "start" && range.end !== null ? "bg-[linear-gradient(to_right,transparent_50%,#f5f5f4_50%)]"
-              : state === "end" ? "bg-[linear-gradient(to_right,#f5f5f4_50%,transparent_50%)]" : "";
+          const band = state === "range" ? "bg-[#f2dce4]"
+            : state === "start" && range.end !== null ? "bg-[linear-gradient(to_right,transparent_50%,#f2dce4_50%)]"
+              : state === "end" ? "bg-[linear-gradient(to_right,#f2dce4_50%,transparent_50%)]" : "";
           const title = TITLES[state] ?? (state === "off"
             ? time === 1440 ? "ใช้เป็นเวลาสิ้นสุดเท่านั้น" : "ยังไม่ได้เลือกวันที่หรือเลยเวลาแล้ว"
             : "แตะเพื่อเลือกเวลา");
@@ -86,11 +87,11 @@ export default function TimeRangePicker({ date, now, value, onChange, busy = {},
         })}
       </div>
       <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-stone-500">
-        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="size-3 rounded bg-stone-900" />เริ่ม / สิ้นสุด</span>
-        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-5 bg-stone-100" />ช่วงที่เลือก</span>
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="size-3 rounded cb-booking-selected" />เริ่ม / สิ้นสุด</span>
+        <span className="flex items-center gap-1.5"><i aria-hidden="true" className="h-3 w-5 cb-booking-selected-range" />ช่วงที่เลือก</span>
         <span className="flex items-center gap-1.5"><i aria-hidden="true" className="size-3 rounded ring-1 ring-inset ring-stone-400" />จบได้</span>
-        {busy.taken && <span className="flex items-center gap-1.5"><s className="rounded bg-stone-100 px-1 text-stone-400">12:00</s>ถูกจองแล้ว</span>}
-        {busy.mine && <span className="flex items-center gap-1.5"><s className="rounded bg-amber-50 px-1 text-amber-700/70">14:00</s>คุณมีจองที่อื่น</span>}
+        {busy.taken && <span className="flex items-center gap-1.5"><s className="rounded bg-stone-200 px-1 text-stone-600">12:00</s>ถูกจองแล้ว</span>}
+        {busy.mine && <span className="flex items-center gap-1.5"><s className="rounded bg-amber-100 px-1 text-amber-900">14:00</s>คุณมีจองที่อื่น</span>}
       </div>
     </div>
   );

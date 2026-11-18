@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Alert from "@/components/Alert";
 import BookingForm from "@/components/BookingForm";
+import "@/components/booking-scrapbook.css";
 import { api } from "@/libs/api";
 import { requireUser } from "@/libs/auth";
 import { getErrorMessage } from "@/libs/errors";
@@ -32,14 +33,19 @@ export default async function EditBookingPage({ params }: {
   }
 
   return (
-    <main className="mx-auto max-w-xl px-6 py-10">
+    <main className="mx-auto max-w-xl px-4 py-8 sm:px-6 sm:py-10">
       <Link href="/bookings" className="text-sm text-stone-500 hover:text-stone-900">
         ← {admin ? "การจองทั้งหมด" : "การจองของฉัน"}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight">แก้ไขการจอง</h1>
-      <p className="mt-1 text-stone-500">เปลี่ยนสนาม วัน หรือเวลาได้ ระบบจะตรวจเวลาซ้อนให้อีกครั้ง</p>
+      <div className="mt-3 cb-booking-hero">
+        <span className="cb-booking-hero-court" aria-hidden="true" />
+        <div className="cb-booking-note">
+          <h1 className="cb-booking-heading">แก้ไขการจอง</h1>
+          <p className="mt-1 text-sm text-stone-600">เปลี่ยนสนาม วัน หรือเวลาได้ ระบบจะตรวจเวลาซ้อนให้อีกครั้ง</p>
+        </div>
+      </div>
       {admin && booking.ok && (
-        <div className="mt-6 rounded-xl border border-stone-200 bg-white p-4 text-sm">
+        <div className="mt-6 p-4 text-sm cb-booking-summary">
           <p className="font-medium">ผู้จอง: {booking.data.user?.name ?? "ไม่พบข้อมูลผู้จอง"}</p>
           {booking.data.user?.email && <p className="break-all text-stone-500">{booking.data.user.email}</p>}
         </div>

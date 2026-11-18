@@ -4,16 +4,17 @@ import Link from "next/link";
 import { deleteBooking } from "@/app/bookings/actions";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import SportBadge from "@/components/SportBadge";
+import "@/components/booking-scrapbook.css";
 import { durationText } from "@/libs/booking-time";
 import { baht, endTime, thaiDate } from "@/libs/format";
 import type { Booking } from "@/types";
 
 export default function BookingTable({ bookings, admin = false }: { bookings: Booking[]; admin?: boolean }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-stone-200 bg-white">
+    <div className="overflow-x-auto cb-booking-table">
       <table className="w-full text-left text-sm">
         <caption className="sr-only">{admin ? "รายการจองของสมาชิกทุกคน" : "รายการจองของฉัน"}</caption>
-        <thead className="border-b border-stone-200 bg-stone-50 text-stone-500">
+        <thead>
           <tr>
             {admin && <th scope="col" className="px-5 py-3 font-medium">ผู้จอง</th>}
             <th scope="col" className="px-5 py-3 font-medium">สนาม</th>

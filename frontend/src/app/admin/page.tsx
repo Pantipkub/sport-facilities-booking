@@ -17,7 +17,7 @@ export default async function DashboardPage() {
   if (!bookings.ok || !facilities.ok) {
     return (
       <main className="mx-auto max-w-6xl px-6 py-10">
-        <h1 className="text-3xl font-semibold tracking-tight">ภาพรวม</h1>
+        <h1 className="cb-title text-3xl font-semibold tracking-tight">ภาพรวม</h1>
         <div className="mt-6">
           <Alert variant="error">โหลดข้อมูลภาพรวมไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</Alert>
         </div>
@@ -47,7 +47,7 @@ export default async function DashboardPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
-      <h1 className="text-3xl font-semibold tracking-tight">ภาพรวม</h1>
+      <h1 className="cb-title text-3xl font-semibold tracking-tight">ภาพรวม</h1>
       <p className="mt-1 text-stone-500">
         {thaiDate(now.date, "long")}
       </p>
@@ -63,17 +63,17 @@ export default async function DashboardPage() {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-stone-200 bg-white p-6">
+        <section className="cb-paper p-4 sm:p-6">
           <h2 className="font-semibold">ชั่วโมงที่ถูกจอง 7 วันข้างหน้า</h2>
           <p className="text-sm text-stone-500">
             {thaiDate(now.date, "dayMonth")} ถึง {thaiDate(weekEnd, "dayMonth")}
           </p>
           <div className="mt-5 space-y-3">
             {hours.map(({ facility, hours: h }) => (
-              <div key={facility._id} className="grid grid-cols-[150px_1fr_56px] items-center gap-3 text-sm">
+              <div key={facility._id} className="grid grid-cols-[minmax(0,1fr)_minmax(2rem,1fr)_3rem] items-center gap-3 text-sm">
                 <span className="truncate">{facility.name}</span>
                 <div className="h-2.5 rounded-full bg-stone-100">
-                  <div className="h-2.5 rounded-full bg-stone-900" style={{ width: `${(h / maxHours) * 100}%` }} />
+                  <div className="h-2.5 rounded-full bg-[var(--wine)]" style={{ width: `${(h / maxHours) * 100}%` }} />
                 </div>
                 <span className="text-right text-stone-500">{h} ชม.</span>
               </div>
@@ -81,7 +81,7 @@ export default async function DashboardPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-stone-200 bg-white p-6">
+        <section className="cb-paper p-4 sm:p-6">
           <div className="flex items-baseline justify-between">
             <h2 className="font-semibold">การจองวันนี้</h2>
             <Link href="/bookings" className="text-sm text-stone-500 hover:text-stone-900">

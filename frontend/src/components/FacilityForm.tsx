@@ -39,7 +39,7 @@ export default function FacilityForm({ facility }: { facility?: Facility }) {
       <Link href="/admin/facilities" className="text-sm text-stone-500 hover:text-stone-900">
         ← จัดการสนาม
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight">{facility ? "แก้ไขสนาม" : "เพิ่มสนามใหม่"}</h1>
+      <h1 className="mt-4 cb-title text-3xl font-semibold tracking-tight">{facility ? "แก้ไขสนาม" : "เพิ่มสนามใหม่"}</h1>
       <p className="mt-1 text-stone-500">
         {facility
           ? "แก้ไขข้อมูลแล้วกดบันทึก การจองเดิมของสนามนี้ยังอยู่"
@@ -50,7 +50,7 @@ export default function FacilityForm({ facility }: { facility?: Facility }) {
           <Alert variant="error">{state.error}</Alert>
         </div>
       )}
-      <form action={action} noValidate className="mt-8 space-y-5 rounded-2xl border border-stone-200 bg-white p-8">
+      <form action={action} noValidate className="mt-8 space-y-5 cb-paper cb-ticket p-5 sm:p-8">
         <label className="block">
           <span className={LABEL}>ชื่อสนาม</span>
           <input {...props("name")} placeholder="Badminton Court C" />
@@ -106,7 +106,7 @@ export default function FacilityForm({ facility }: { facility?: Facility }) {
           <Link href="/admin/facilities" className={`${BTN} border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 hover:text-stone-900`}>
             ยกเลิก
           </Link>
-          <button disabled={pending} className={`${BTN} bg-stone-900 text-white hover:bg-stone-700 disabled:opacity-60`}>
+          <button disabled={pending} className={`${BTN} cb-primary disabled:opacity-60`}>
             {pending ? "กำลังบันทึก" : facility ? "บันทึกการแก้ไข" : "เพิ่มสนาม"}
           </button>
         </div>

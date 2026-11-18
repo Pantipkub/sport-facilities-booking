@@ -28,7 +28,7 @@ export default function ConfirmDialog({
       </button>
       <dialog
         ref={ref}
-        className="m-auto w-[calc(100%-3rem)] max-w-sm rounded-2xl bg-white p-6 text-left text-stone-900 shadow-lg backdrop:bg-stone-900/40"
+        className="cb-paper m-auto w-[calc(100%-3rem)] max-w-sm p-5 text-left whitespace-normal shadow-lg backdrop:bg-stone-900/40 sm:p-6"
       >
         <h2 className="text-lg font-semibold">{title}</h2>
         <p className="mt-2 text-sm text-stone-500">{message}</p>
