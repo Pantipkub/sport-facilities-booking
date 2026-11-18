@@ -20,6 +20,25 @@ body {
 
 .cb-primary:hover { background: var(--wine-dark); }
 
+.cb-back-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem 1rem;
+  border: 1px solid var(--wine);
+  border-radius: 9999px;
+  background: #fffcf6;
+  color: var(--wine-dark);
+  font-size: .875rem;
+  font-weight: 500;
+  box-shadow: 0 2px #69112b12;
+}
+
+.cb-back-link:hover { background: var(--paper); }
+.cb-back-link:active { background: var(--sky); box-shadow: none; }
+.cb-back-link:focus-visible { outline: 2px solid var(--wine-dark); outline-offset: 3px; }
+
 .cb-paper {
   background: #fffcf6;
   border: 1px solid var(--line);

@@ -29,8 +29,11 @@ export default async function FacilityPage({ params }: PageProps<"/facilities/[i
   return (
     <main className="mx-auto grid max-w-6xl gap-6 px-6 py-10 lg:grid-cols-[1fr_380px]">
       <div>
-        <Link href="/" className="text-sm text-stone-500 hover:text-stone-900">
-          ← สนามทั้งหมด
+        <Link href="/" className="cb-back-link">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="size-4">
+            <path d="m10 5-7 7 7 7M3 12h18" />
+          </svg>
+          กลับไปสนามทั้งหมด
         </Link>
         <div className="mt-4 overflow-hidden cb-paper">
           <FacilityImage facility={f} className="aspect-[21/9]" />
