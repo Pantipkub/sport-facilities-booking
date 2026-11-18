@@ -262,4 +262,6 @@ process.on("uncaughtException", (error) => {
   process.exit(1);
 });
 
-module.exports = { app, server };
+// Vercel needs the app itself as the default export; tests also use .server
+module.exports = app;
+module.exports.server = server;
