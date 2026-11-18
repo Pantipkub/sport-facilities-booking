@@ -7,6 +7,7 @@ const FacilitySchema = new mongoose.Schema(
     location: { type: String, required: [true, "Please add a location"], trim: true },
     capacity: { type: Number, required: [true, "Please add a capacity"], min: [1, "Capacity must be at least 1"] },
     hourlyRate: { type: Number, required: [true, "Please add an hourly rate"], min: [0, "Hourly rate cannot be negative"] },
+    imageUrl: { type: String, trim: true }, // Vercel Blob URL, uploaded by the frontend
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
