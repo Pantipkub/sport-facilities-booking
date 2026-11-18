@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { saveFacility, type FacilityFormState } from "@/app/admin/facilities/actions";
 import Alert from "@/components/Alert";
+import FacilityImage from "@/components/FacilityImage";
 import { SPORTS } from "@/libs/sports";
 import type { Facility } from "@/types";
 
@@ -30,7 +31,7 @@ export default function FacilityForm({ facility }: { facility?: Facility }) {
     "aria-invalid": !!state.errors?.[key],
     className: `${INPUT} ${state.errors?.[key] ? "border-red-400" : "border-stone-300"}`,
   });
-  const error = (key: Field) =>
+  const error = (key: Field | "image") =>
     state.errors?.[key] && <span className="mt-1 block text-xs text-red-600">{state.errors[key]}</span>;
 
   return (
@@ -86,6 +87,21 @@ export default function FacilityForm({ facility }: { facility?: Facility }) {
             {error("hourlyRate")}
           </label>
         </div>
+        <label className="block">
+          <span className={LABEL}>รูปสนาม (ไม่บังคับ)</span>
+          {facility?.imageUrl && <FacilityImage facility={facility} className="mt-1.5 aspect-[16/9] rounded-lg" />}
+          <input
+            name="image"
+            type="file"
+            accept="image/*"
+            aria-invalid={!!state.errors?.image}
+            className="mt-1.5 block w-full text-sm text-stone-600 file:mr-3 file:h-11 file:cursor-pointer file:rounded-lg file:border-0 file:bg-stone-100 file:px-4 file:text-sm file:font-medium file:text-stone-900 hover:file:bg-stone-200"
+          />
+          <span className="mt-1 block text-xs text-stone-500">
+            ไฟล์รูปไม่เกิน 4MB{facility?.imageUrl && " · เลือกรูปใหม่เพื่อเปลี่ยน หรือเว้นไว้เพื่อใช้รูปเดิม"}
+          </span>
+          {error("image")}
+        </label>
         <div className="flex justify-end gap-2 border-t border-stone-100 pt-5">
           <Link href="/admin/facilities" className={`${BTN} border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 hover:text-stone-900`}>
             ยกเลิก

@@ -1,13 +1,15 @@
 "use server";
 
+import { put } from "@vercel/blob";
 import { redirect } from "next/navigation";
 import { api } from "@/libs/api";
 import { requireUser } from "@/libs/auth";
 import { SPORTS } from "@/libs/sports";
 
 type Field = "name" | "sportType" | "location" | "capacity" | "hourlyRate";
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // Vercel functions accept request bodies up to 4.5 MB
 export type FacilityFormState = {
-  errors?: Partial<Record<Field, string>>;
+  errors?: Partial<Record<Field | "image", string>>;
   error?: string;
   values?: Record<Field, string>; // refill the form after an error
 };
@@ -37,11 +39,25 @@ export async function saveFacility(
   if (!Number.isInteger(capacity) || capacity < 1) errors.capacity = "ความจุต้องเป็นจำนวนเต็มตั้งแต่ 1 คนขึ้นไป";
   if (!values.hourlyRate || !Number.isFinite(hourlyRate) || hourlyRate < 0)
     errors.hourlyRate = "ราคาต้องเป็นตัวเลขตั้งแต่ 0 บาทขึ้นไป";
+  const image = formData.get("image");
+  const file = image instanceof File && image.size > 0 ? image : null; // no file = keep the current photo
+  if (file && !file.type.startsWith("image/")) errors.image = "กรุณาเลือกไฟล์รูปภาพ";
+  else if (file && file.size > MAX_IMAGE_BYTES) errors.image = "รูปต้องมีขนาดไม่เกิน 4MB";
   if (Object.keys(errors).length) return { errors, values };
+
+  // ponytail: a replaced photo stays in Blob; call del(oldUrl) if storage use matters
+  let imageUrl: string | undefined;
+  if (file) {
+    try {
+      imageUrl = (await put(`facilities/${file.name}`, file, { access: "public", addRandomSuffix: true })).url;
+    } catch {
+      return { values, errors: { image: "อัปโหลดรูปไม่สำเร็จ กรุณาลองใหม่อีกครั้ง" } };
+    }
+  }
 
   const result = await api(id ? `/facilities/${id}` : "/facilities", {
     method: id ? "PUT" : "POST",
-    body: { ...values, capacity, hourlyRate },
+    body: { ...values, capacity, hourlyRate, ...(imageUrl && { imageUrl }) },
     token: user.token,
   });
   if (!result.ok) {
